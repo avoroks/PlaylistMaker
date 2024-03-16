@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <ImageButton
+        android:id="@+id/back_from_search"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:backgroundTint="@android:color/transparent"
+        android:foreground="?attr/selectableItemBackground"
+        android:padding="@dimen/icon_padding_for_settings_activity_title"
+        android:src="@drawable/ic_back" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="@color/white"
+        android:gravity="fill"
+        android:padding="@dimen/padding_for_settings_activity_title"
+        android:text="@string/search"
+        android:textColor="@color/main_text_color"
+        android:textSize="@dimen/text_size_for_titles" />
+</LinearLayout>

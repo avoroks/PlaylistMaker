@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/back_from_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:backgroundTint="@android:color/transparent"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="@dimen/icon_padding_for_settings_activity_title"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/white"
+            android:gravity="fill"
+            android:padding="@dimen/padding_for_settings_activity_title"
+            android:text="@string/settings"
+            android:textColor="@color/main_text_color"
+            android:textSize="@dimen/text_size_for_titles" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/top_margin_for_settings_activity_layout">
+
+        <Switch
+            android:id="@+id/themeSwitcher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/padding_for_settings_activity_list"
+            android:paddingLeft="@dimen/padding_for_settings_activity_list"
+            android:text="@string/dark_mode"
+            android:textSize="@dimen/text_size" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/textViewForSettingsActivity"
+            android:text="@string/is_need_to_share" />
+
+        <ImageButton
+            style="@style/imageButtonForSettingsActivity"
+            android:src="@drawable/ic_share" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/textViewForSettingsActivity"
+            android:text="@string/support" />
+
+        <ImageButton
+            style="@style/imageButtonForSettingsActivity"
+            android:src="@drawable/ic_support" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/textViewForSettingsActivity"
+            android:text="@string/agreement" />
+
+        <ImageButton
+            style="@style/imageButtonForSettingsActivity"
+            android:src="@drawable/ic_arrow_forward" />
+    </FrameLayout>
+</LinearLayout>
