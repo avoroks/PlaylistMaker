@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/top_margin_for_settings_activity_layout"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/back_from_media"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="@color/white"
+        android:drawableStart="@drawable/ic_back"
+        android:drawablePadding="@dimen/icon_padding_for_settings_activity_title"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="fill"
+        android:padding="@dimen/padding_for_settings_activity_title"
+        android:text="@string/media"
+        android:textColor="@color/main_text_color"
+        android:textSize="@dimen/text_size_for_titles" />
+</LinearLayout>
