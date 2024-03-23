@@ -25,19 +25,19 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/seach"
+            android:id="@+id/button_search"
             style="@style/buttonStyle"
             android:text="@string/search"
             app:icon="@drawable/ic_search" />
 
         <Button
-            android:id="@+id/mediafiles"
+            android:id="@+id/button_mediafiles"
             style="@style/buttonStyle"
             android:text="@string/media"
             app:icon="@drawable/ic_music" />
 
         <Button
-            android:id="@+id/settings"
+            android:id="@+id/button_settings"
             style="@style/buttonStyle"
             android:text="@string/settings"
             app:icon="@drawable/ic_settings" />

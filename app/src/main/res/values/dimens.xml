@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="horizontal_indent_for_main_activity">16dp</dimen>
-    <dimen name="vertical_padding_for_main_activity_title">15dp</dimen>
+    <dimen name="vertical_padding_for_main_activity_title">12dp</dimen>
     <dimen name="top_margin_for_main_activity_button_layout">24dp</dimen>
     <dimen name="bottom_margin_for_main_activity_button_layout">28dp</dimen>
     <dimen name="layout_height_for_main_activity_buttons">0dp</dimen>
@@ -9,9 +9,10 @@
     <dimen name="text_size">16sp</dimen>
     <dimen name="corner_radius_for_main_activity_buttons">16dp</dimen>
     <dimen name="icon_padding_for_main_activity_buttons">8dp</dimen>
-    <dimen name="icon_padding_for_settings_activity_title">4dp</dimen>
-    <dimen name="padding_for_settings_activity_title">11dp</dimen>
+    <dimen name="icon_padding_for_settings_activity_title">24dp</dimen>
+    <dimen name="padding_for_settings_activity_title">12dp</dimen>
     <dimen name="image_button_layout_width_for_settings_activity">56dp</dimen>
-    <dimen name="padding_for_settings_activity_list">21dp</dimen>
+    <dimen name="padding_left_for_settings_activity_list">16dp</dimen>
+    <dimen name="padding_vertical_for_settings_activity_list">20dp</dimen>
     <dimen name="top_margin_for_settings_activity_layout">26dp</dimen>
 </resources>

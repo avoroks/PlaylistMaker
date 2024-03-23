@@ -1,20 +1,18 @@
 package com.practicum.playlistmaker
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
+import android.widget.TextView
 
 class MediaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media)
 
-        val backButton = this.findViewById<ImageView>(R.id.back_from_media)
+        val backButton = this.findViewById<TextView>(R.id.back_from_media)
 
         backButton.setOnClickListener {
-            val displayMain = Intent(this, MainActivity::class.java)
-            startActivity(displayMain)
+            this.finish()
         }
     }
 }

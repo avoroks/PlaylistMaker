@@ -14,19 +14,22 @@
         <item name="iconPadding">@dimen/icon_padding_for_main_activity_buttons</item>
         <item name="iconTint">@color/black</item>
     </style>
-    
-    <style name="textViewForSettingsActivity">
+
+    <style name="listElementForSettingsActivity">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:gravity">fill</item>
-        <item name="android:padding">@dimen/padding_for_settings_activity_list</item>
+        <item name="android:paddingVertical">@dimen/padding_vertical_for_settings_activity_list
+        </item>
+        <item name="android:paddingLeft">@dimen/padding_left_for_settings_activity_list</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/text_size</item>
     </style>
 
     <style name="imageButtonForSettingsActivity">
-        <item name="android:layout_width">@dimen/image_button_layout_width_for_settings_activity</item>
+        <item name="android:layout_width">@dimen/image_button_layout_width_for_settings_activity
+        </item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_gravity">end</item>
         <item name="android:backgroundTint">@android:color/transparent</item>

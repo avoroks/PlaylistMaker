@@ -6,23 +6,23 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
-import com.practicum.playlistmaker.R.id.mediafiles
-import com.practicum.playlistmaker.R.id.seach
-import com.practicum.playlistmaker.R.id.settings
+import com.practicum.playlistmaker.R.id.button_mediafiles
+import com.practicum.playlistmaker.R.id.button_search
+import com.practicum.playlistmaker.R.id.button_settings
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val searchButton = findViewById<Button>(seach)
+        val searchButton = findViewById<Button>(button_search)
 
         searchButton.setOnClickListener {
             val displaySearch = Intent(this, SearchActivity::class.java)
             startActivity(displaySearch)
         }
 
-        val mediaButton = findViewById<Button>(mediafiles)
+        val mediaButton = findViewById<Button>(button_mediafiles)
         val displayMedia = Intent(this, MediaActivity::class.java)
 
         val clickListenerForMedia = object : OnClickListener {
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         mediaButton.setOnClickListener(clickListenerForMedia)
 
-        val settingsButton = findViewById<Button>(settings)
+        val settingsButton = findViewById<Button>(button_settings)
 
         settingsButton.setOnClickListener {
             val displaySettings = Intent(this, SettingsActivity::class.java)
