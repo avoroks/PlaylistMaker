@@ -65,7 +65,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val SEARCH_TEXT = "PRODUCT_AMOUNT"
+        const val SEARCH_TEXT = "SEARCH_TEXT"
         const val EMPTY_TEXT = ""
     }
 }
