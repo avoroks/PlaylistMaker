@@ -1,8 +1,20 @@
 package com.practicum.playlistmaker
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.content.Intent.ACTION_VIEW
+import android.content.Intent.EXTRA_EMAIL
+import android.content.Intent.EXTRA_SUBJECT
+import android.content.Intent.EXTRA_TEXT
+import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
+import android.widget.ImageButton
+import android.widget.Switch
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,5 +26,51 @@ class SettingsActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             this.finish()
         }
+
+        val darkThemeSwitch = this.findViewById<Switch>(R.id.themeSwitcher)
+        darkThemeSwitch.isChecked = isDarkModeOn()
+
+        darkThemeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
+            else AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+        }
+
+        val userGuideButton = this.findViewById<ImageButton>(R.id.button_userGuide)
+
+        userGuideButton.setOnClickListener {
+            val webIntent =
+                Intent(ACTION_VIEW, Uri.parse(getString(R.string.practicum_offer)))
+            startActivity(webIntent)
+        }
+
+        val supportButton = this.findViewById<ImageButton>(R.id.button_support)
+
+        supportButton.setOnClickListener {
+            val mailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+                putExtra(EXTRA_EMAIL, arrayOf(getString(R.string.email)))
+                putExtra(
+                    EXTRA_SUBJECT,
+                    getString(R.string.email_subject)
+                )
+                putExtra(EXTRA_TEXT, getString(R.string.email_text))
+            }
+            startActivity(mailIntent)
+        }
+
+        val shareButton = this.findViewById<ImageButton>(R.id.button_share)
+
+        shareButton.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(EXTRA_TEXT, getString(R.string.course_link))
+            }
+            startActivity(shareIntent)
+        }
+    }
+
+    private fun isDarkModeOn(): Boolean {
+        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        return nightModeFlags == Configuration.UI_MODE_NIGHT_YES
     }
 }

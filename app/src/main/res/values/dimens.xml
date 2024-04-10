@@ -15,4 +15,12 @@
     <dimen name="padding_left_for_settings_activity_list">16dp</dimen>
     <dimen name="padding_vertical_for_settings_activity_list">20dp</dimen>
     <dimen name="top_margin_for_settings_activity_layout">26dp</dimen>
+    <dimen name="top_margin_for_search_activity_edittext">8dp</dimen>
+    <dimen name="horizontal_margin_for_search_activity_edittext">16dp</dimen>
+    <dimen name="height_for_search_activity_edittext">36dp</dimen>
+    <dimen name="padding_left_for_search_activity_edittext">12dp</dimen>
+    <dimen name="drawable_padding_for_search_activity_edittext">8dp</dimen>
+    <dimen name="radius_for_search_activity_edittext">8dp</dimen>
+    <dimen name="margin_top_for_search_activity_edittext_drawable">10dp</dimen>
+    <dimen name="margin_end_for_search_activity_edittext_drawable">18dp</dimen>
 </resources>

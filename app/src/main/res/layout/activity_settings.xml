@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?attr/otherActivityColor"
     android:orientation="vertical">
 
     <LinearLayout
@@ -13,17 +13,8 @@
 
         <TextView
             android:id="@+id/back_from_settings"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:backgroundTint="@color/white"
-            android:drawableStart="@drawable/ic_back"
-            android:drawablePadding="@dimen/icon_padding_for_settings_activity_title"
-            android:foreground="?attr/selectableItemBackground"
-            android:gravity="fill"
-            android:padding="@dimen/padding_for_settings_activity_title"
-            android:text="@string/settings"
-            android:textColor="@color/main_text_color"
-            android:textSize="@dimen/text_size_for_titles" />
+            style="@style/activityHeader"
+            android:text="@string/settings" />
     </LinearLayout>
 
     <Switch
@@ -32,7 +23,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/dark_mode"
-        android:textSize="@dimen/text_size" />
+        android:textSize="@dimen/text_size"
+        android:thumbTint="@color/thumb_style"
+        android:trackTint="@color/track_style"
+        android:trackTintMode="src_over" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -43,6 +37,7 @@
             android:text="@string/is_need_to_share" />
 
         <ImageButton
+            android:id="@+id/button_share"
             style="@style/imageButtonForSettingsActivity"
             android:src="@drawable/ic_share" />
     </FrameLayout>
@@ -56,6 +51,7 @@
             android:text="@string/support" />
 
         <ImageButton
+            android:id="@+id/button_support"
             style="@style/imageButtonForSettingsActivity"
             android:src="@drawable/ic_support" />
     </FrameLayout>
@@ -69,6 +65,7 @@
             android:text="@string/agreement" />
 
         <ImageButton
+            android:id="@+id/button_userGuide"
             style="@style/imageButtonForSettingsActivity"
             android:src="@drawable/ic_arrow_forward" />
     </FrameLayout>

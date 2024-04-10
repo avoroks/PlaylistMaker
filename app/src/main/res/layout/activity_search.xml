@@ -3,19 +3,47 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/top_margin_for_settings_activity_layout"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/back_from_search"
+        style="@style/activityHeader"
+        android:text="@string/search" />
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:backgroundTint="@color/white"
-        android:drawableStart="@drawable/ic_back"
-        android:drawablePadding="@dimen/icon_padding_for_settings_activity_title"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="fill"
-        android:padding="@dimen/padding_for_settings_activity_title"
-        android:text="@string/search"
-        android:textColor="@color/main_text_color"
-        android:textSize="@dimen/text_size_for_titles" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/edittext_search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_for_search_activity_edittext"
+            android:layout_marginHorizontal="@dimen/horizontal_margin_for_search_activity_edittext"
+            android:layout_marginTop="@dimen/top_margin_for_search_activity_edittext"
+            android:background="@drawable/search_field_shape"
+            android:backgroundTint="?attr/searchFieldColor"
+            android:drawableStart="@drawable/ic_search_for_search_activity"
+            android:drawablePadding="@dimen/drawable_padding_for_search_activity_edittext"
+            android:drawableTint="?attr/searchFieldTextColorHint"
+            android:hint="@string/search"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLength="15"
+            android:paddingLeft="@dimen/padding_left_for_search_activity_edittext"
+            android:textColor="@color/main_dark_color"
+            android:textColorHint="?attr/searchFieldTextColorHint"
+            android:textCursorDrawable="@drawable/color_cursor" />
+
+        <ImageButton
+            android:id="@+id/button_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/margin_top_for_search_activity_edittext_drawable"
+            android:layout_marginEnd="@dimen/margin_end_for_search_activity_edittext_drawable"
+            android:backgroundTint="@android:color/transparent"
+            android:foreground="?attr/selectableItemBackground"
+            android:src="@drawable/ic_clear"
+            android:visibility="gone" />
+    </FrameLayout>
 </LinearLayout>
