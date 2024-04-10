@@ -3,14 +3,12 @@ package com.practicum.playlistmaker
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 
 class SearchActivity : AppCompatActivity() {
     private var textValue = EMPTY_TEXT
@@ -34,17 +32,13 @@ class SearchActivity : AppCompatActivity() {
             hideSoftKeyboard(editTextField)
         }
 
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        editTextField.addTextChangedListener(
+            onTextChanged = {
+                s, _, _, _ ->
                 textValue = s.toString()
-                clearButton.visibility = receiveButtonVisibility(s)
+                clearButton.isVisible = !s.isNullOrEmpty()
             }
-
-            override fun afterTextChanged(s: Editable?) {}
-        }
-        editTextField.addTextChangedListener(textWatcher)
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -57,14 +51,12 @@ class SearchActivity : AppCompatActivity() {
         textValue = savedInstanceState.getString(SEARCH_TEXT, EMPTY_TEXT)
     }
 
-    private fun receiveButtonVisibility(s: CharSequence?) = if (s.isNullOrEmpty()) GONE else VISIBLE
-
     private fun hideSoftKeyboard(input: EditText) {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(input.windowToken, 0);
     }
 
-    companion object {
+    private companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val EMPTY_TEXT = ""
     }
