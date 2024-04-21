@@ -9,6 +9,7 @@
     <attr name="iconsBackgroundColor" format="color"></attr>
     <attr name="searchFieldColor" format="color"></attr>
     <attr name="searchFieldTextColorHint" format="color"></attr>
+    <attr name="trackItemAdditionalInfoColor" format="color"></attr>
 
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="mainActivityColor">@color/main_light_color</item>
@@ -22,5 +23,8 @@
 
         <item name="searchFieldColor">@color/search_field_day_color</item>
         <item name="searchFieldTextColorHint">@color/search_field_content_day_color</item>
+
+        <item name="trackItemAdditionalInfoColor">@color/track_additional_info_day_color</item>
+
     </style>
 </resources>
