@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.internal.ViewUtils.dpToPx
 import com.practicum.playlistmaker.data.Track
 
 class TrackViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -17,9 +18,9 @@ class TrackViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     fun bind(item: Track) {
         Glide.with(itemView)
             .load(item.artworkUrl100)
-            .placeholder(R.drawable.ic_music)
+            .placeholder(R.drawable.track_placeholder)
             .fitCenter()
-            .transform(RoundedCorners(2))
+            .transform(RoundedCorners(dpToPx(itemView.context, 2).toInt()))
             .into(trackPoster)
 
         trackName.text = item.trackName
