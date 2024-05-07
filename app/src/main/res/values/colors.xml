@@ -16,5 +16,7 @@
     <color name="search_field_content_day_color">#AEAFB4</color>
     <color name="search_field_content_night_color">#1A1B22</color>
 
+    <color name="track_additional_info_day_color">#AEAFB4</color>
+
     <color name="cursor_color_for_search_activity_edittext">#3772E7</color>
 </resources>

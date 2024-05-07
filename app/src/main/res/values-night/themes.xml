@@ -11,5 +11,7 @@
 
         <item name="searchFieldColor">@color/white</item>
         <item name="searchFieldTextColorHint">@color/search_field_content_night_color</item>
+
+        <item name="trackItemAdditionalInfoColor">@color/white</item>
     </style>
 </resources>

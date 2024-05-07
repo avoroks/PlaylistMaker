@@ -53,4 +53,12 @@
         <item name="android:drawableStart">@drawable/ic_back</item>
         <item name="android:drawableTint">?attr/returnBackDrawableColor</item>
     </style>
+
+    <style name="textViewForTrackAdditionalInfo">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">?attr/trackItemAdditionalInfoColor</item>
+        <item name="android:textSize">11sp</item>
+    </style>
 </resources>
