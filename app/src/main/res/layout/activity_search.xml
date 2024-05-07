@@ -28,10 +28,12 @@
             android:drawablePadding="@dimen/drawable_padding_for_search_activity_edittext"
             android:drawableTint="?attr/searchFieldTextColorHint"
             android:hint="@string/search"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:lines="1"
             android:maxLength="15"
             android:paddingLeft="@dimen/padding_left_for_search_activity_edittext"
+            android:singleLine="true"
             android:textColor="@color/main_dark_color"
             android:textColorHint="?attr/searchFieldTextColorHint"
             android:textCursorDrawable="@drawable/color_cursor" />
@@ -53,8 +55,22 @@
         android:id="@+id/rv_tracks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_marginTop="@dimen/margin_top_for_recyclerview"
         android:orientation="vertical"
-        tools:listitem="@layout/track_item"
-        android:layout_marginTop="@dimen/margin_top_for_recyclerview" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/track_item" />
+
+    <include
+        android:id="@+id/connection_problem"
+        layout="@layout/connection_problem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/empty_result"
+        layout="@layout/nothing_found"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 </LinearLayout>

@@ -13,4 +13,8 @@
     <string name="email_subject" translatable="false">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="email_text" translatable="false">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="course_link" translatable="false">https://practicum.yandex.ru/android-developer/</string>
+
+    <string name="nothing_found" translatable="false">Ничего не нашлось</string>
+    <string name="connection_problem" translatable="false">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="update" translatable="false">Обновить</string>
 </resources>

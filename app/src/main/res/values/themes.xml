@@ -1,15 +1,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <attr name="mainActivityColor" format="color"></attr>
-    <attr name="mainActivityHeaderColor" format="color"></attr>
+    <attr name="mainActivityColor" format="color" />
+    <attr name="mainActivityHeaderColor" format="color" />
 
-    <attr name="otherActivityColor" format="color"></attr>
-    <attr name="otherActivityHeaderColor" format="color"></attr>
-    <attr name="returnBackDrawableColor" format="color"></attr>
-    <attr name="listElementsTextColor" format="color"></attr>
-    <attr name="iconsBackgroundColor" format="color"></attr>
-    <attr name="searchFieldColor" format="color"></attr>
-    <attr name="searchFieldTextColorHint" format="color"></attr>
-    <attr name="trackItemAdditionalInfoColor" format="color"></attr>
+    <attr name="otherActivityColor" format="color" />
+    <attr name="otherActivityHeaderColor" format="color" />
+    <attr name="returnBackDrawableColor" format="color" />
+    <attr name="listElementsTextColor" format="color" />
+    <attr name="iconsBackgroundColor" format="color" />
+    <attr name="searchFieldColor" format="color">/</attr>
+    <attr name="searchFieldTextColorHint" format="color" />
+    <attr name="trackItemAdditionalInfoColor" format="color" />
+
+    <attr name="nothingFoundImage" format="reference" />
+    <attr name="connectionProblemImage" format="reference" />
+    <attr name="errorTextColor" format="color" />
+    <attr name="updateButtonColor" format="color" />
+    <attr name="updateButtonTextColor" format="color" />
 
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="mainActivityColor">@color/main_light_color</item>
@@ -26,5 +32,10 @@
 
         <item name="trackItemAdditionalInfoColor">@color/track_additional_info_day_color</item>
 
+        <item name="nothingFoundImage">@drawable/nothing_found_light_mode</item>
+        <item name="connectionProblemImage">@drawable/connection_problem_light_mode</item>
+        <item name="errorTextColor">@color/main_dark_color</item>
+        <item name="updateButtonColor">@color/main_dark_color</item>
+        <item name="updateButtonTextColor">@color/white</item>
     </style>
 </resources>
