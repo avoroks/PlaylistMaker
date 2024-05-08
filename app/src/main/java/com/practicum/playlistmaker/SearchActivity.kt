@@ -104,7 +104,7 @@ class SearchActivity : AppCompatActivity() {
             trackList.clear()
             hideErrorBlocks()
 
-            if (response.code() == 200) {
+            if (response.isSuccessfull) {
                 if (response.body()?.results?.isNotEmpty() == true) {
                     trackList.addAll(response.body()?.results!!)
                 }
