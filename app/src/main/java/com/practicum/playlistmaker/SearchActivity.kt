@@ -105,7 +105,7 @@ class SearchActivity : AppCompatActivity() {
             trackList.clear()
             hideErrorBlocks()
 
-            if (response.code() == 200) {
+            if (response.isSuccessfull) {
                 val results = response.body()?.results ?: emptyList()
                 if (results.isNotEmpty()) trackList.addAll(results)
                 if (trackList.isEmpty()) emptyResultProblemBlock.isVisible = true
