@@ -55,10 +55,16 @@ class SearchActivity : AppCompatActivity() {
         connectionProblemBlock = findViewById(R.id.connection_problem)
         emptyResultProblemBlock = findViewById(R.id.empty_result)
 
+        val trackAdapter = TrackAdapter(trackList)
+
+        val rvTracks = findViewById<RecyclerView>(R.id.rv_tracks)
+        rvTracks.adapter = trackAdapter
+
         clearButton.setOnClickListener {
             editTextField.setText(EMPTY_TEXT)
             hideSoftKeyboard(editTextField)
             trackList.clear()
+            trackAdapter.notifyDataSetChanged()
             hideErrorBlocks()
         }
 
@@ -68,11 +74,6 @@ class SearchActivity : AppCompatActivity() {
                 clearButton.isVisible = !s.isNullOrEmpty()
             }
         )
-
-        val trackAdapter = TrackAdapter(trackList)
-
-        val rvTracks = findViewById<RecyclerView>(R.id.rv_tracks)
-        rvTracks.adapter = trackAdapter
 
         editTextField.setOnEditorActionListener { view, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -105,9 +106,8 @@ class SearchActivity : AppCompatActivity() {
             hideErrorBlocks()
 
             if (response.code() == 200) {
-                if (response.body()?.results?.isNotEmpty() == true) {
-                    trackList.addAll(response.body()?.results!!)
-                }
+                val results = response.body()?.results ?: emptyList()
+                if (results.isNotEmpty()) trackList.addAll(results)
                 if (trackList.isEmpty()) emptyResultProblemBlock.isVisible = true
             } else connectionProblemBlock.isVisible = true
 
