@@ -44,6 +44,9 @@
             <TextView
                 android:id="@+id/artist_name"
                 style="@style/textViewForTrackAdditionalInfo"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_weight="1"
                 tools:text="Track Artist" />
 
             <ImageView

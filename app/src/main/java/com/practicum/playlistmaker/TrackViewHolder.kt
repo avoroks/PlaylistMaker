@@ -25,6 +25,6 @@ class TrackViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         trackName.text = item.trackName
         artistName.text = item.artistName
-        trackTime.text = item.trackTime
+        trackTime.text = item.humanReadableTrackTime
     }
 }
