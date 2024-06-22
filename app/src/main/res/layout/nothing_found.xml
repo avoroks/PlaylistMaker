@@ -9,6 +9,6 @@
         android:src="?attr/nothingFoundImage" />
 
     <TextView
-        style="@style/textViewForError"
+        style="@style/textViewForTitle"
         android:text="@string/nothing_found" />
 </LinearLayout>

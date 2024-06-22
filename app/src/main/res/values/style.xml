@@ -69,13 +69,26 @@
         <item name="android:layout_marginTop">@dimen/margin_top_for_error_image</item>
     </style>
 
-    <style name="textViewForError">
+    <style name="textViewForTitle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:layout_marginTop">@dimen/margin_top_for_error_text</item>
+        <item name="android:layout_marginTop">@dimen/margin_top_for_title_text</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textColor">?attr/errorTextColor</item>
-        <item name="android:textSize">@dimen/text_size_for_error</item>
+        <item name="android:textSize">@dimen/text_size_for_title</item>
+    </style>
+
+    <style name="actionButtonOnSearchActivity">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/margin_top_for_action_button</item>
+        <item name="android:backgroundTint">?attr/actionButtonColor</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">?attr/actionButtonTextColor</item>
+        <item name="android:textSize">@dimen/text_size_for_action_button</item>
+        <item name="cornerRadius">@dimen/corner_radius_for_action_button</item>
     </style>
 </resources>
