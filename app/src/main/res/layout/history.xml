@@ -1,0 +1,30 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/textViewForTitle"
+            android:text="@string/search_history" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_history_tracks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_for_history_rv"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/track_item" />
+
+        <Button
+            android:id="@+id/clear_history"
+            style="@style/actionButtonOnSearchActivity"
+            android:text="@string/clear_history" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

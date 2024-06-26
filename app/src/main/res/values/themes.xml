@@ -14,8 +14,8 @@
     <attr name="nothingFoundImage" format="reference" />
     <attr name="connectionProblemImage" format="reference" />
     <attr name="errorTextColor" format="color" />
-    <attr name="updateButtonColor" format="color" />
-    <attr name="updateButtonTextColor" format="color" />
+    <attr name="actionButtonColor" format="color" />
+    <attr name="actionButtonTextColor" format="color" />
 
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="mainActivityColor">@color/main_light_color</item>
@@ -35,7 +35,7 @@
         <item name="nothingFoundImage">@drawable/nothing_found_light_mode</item>
         <item name="connectionProblemImage">@drawable/connection_problem_light_mode</item>
         <item name="errorTextColor">@color/main_dark_color</item>
-        <item name="updateButtonColor">@color/main_dark_color</item>
-        <item name="updateButtonTextColor">@color/white</item>
+        <item name="actionButtonColor">@color/main_dark_color</item>
+        <item name="actionButtonTextColor">@color/white</item>
     </style>
 </resources>

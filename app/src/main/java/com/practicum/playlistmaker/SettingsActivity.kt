@@ -5,16 +5,12 @@ import android.content.Intent.ACTION_VIEW
 import android.content.Intent.EXTRA_EMAIL
 import android.content.Intent.EXTRA_SUBJECT
 import android.content.Intent.EXTRA_TEXT
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageButton
-import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,12 +23,11 @@ class SettingsActivity : AppCompatActivity() {
             this.finish()
         }
 
-        val darkThemeSwitch = this.findViewById<Switch>(R.id.themeSwitcher)
-        darkThemeSwitch.isChecked = isDarkModeOn()
+        val darkThemeSwitch = this.findViewById<SwitchMaterial>(R.id.themeSwitcher)
+        darkThemeSwitch.isChecked = (applicationContext as App).darkTheme
 
         darkThemeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
-            else AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+            (applicationContext as App).switchTheme(isChecked)
         }
 
         val userGuideButton = this.findViewById<ImageButton>(R.id.button_userGuide)
@@ -67,10 +62,5 @@ class SettingsActivity : AppCompatActivity() {
             }
             startActivity(shareIntent)
         }
-    }
-
-    private fun isDarkModeOn(): Boolean {
-        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        return nightModeFlags == Configuration.UI_MODE_NIGHT_YES
     }
 }

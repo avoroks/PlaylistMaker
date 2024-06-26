@@ -17,7 +17,7 @@
         <item name="nothingFoundImage">@drawable/nothing_found_dark_mode</item>
         <item name="connectionProblemImage">@drawable/connection_problem_dark_mode</item>
         <item name="errorTextColor">@color/white</item>
-        <item name="updateButtonColor">@color/white</item>
-        <item name="updateButtonTextColor">@color/main_dark_color</item>
+        <item name="actionButtonColor">@color/white</item>
+        <item name="actionButtonTextColor">@color/main_dark_color</item>
     </style>
 </resources>
