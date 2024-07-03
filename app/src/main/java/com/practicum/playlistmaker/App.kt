@@ -11,7 +11,7 @@ const val PLAYLIST_MAKER_PREFERENCES = "PLAYLIST_MAKER_PREFERENCES"
 
 class App : Application() {
     var darkTheme = false
-    private val sharedPreferences by lazy {
+    private val sharedPreferences by lazy(LazyThreadSafetyMode.None) {
         getSharedPreferences(
             PLAYLIST_MAKER_PREFERENCES,
             MODE_PRIVATE
