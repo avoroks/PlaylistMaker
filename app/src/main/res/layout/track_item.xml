@@ -8,12 +8,9 @@
 
     <ImageView
         android:id="@+id/track_poster"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/layout_height_for_track_image_view"
-        android:layout_marginVertical="@dimen/margin_vertical_for_track_image_view"
-        android:layout_weight="2"
-        android:paddingStart="@dimen/padding_start_for_track_image_view"
-        android:paddingEnd="@dimen/padding_end_for_track_image_view" />
+        android:layout_width="@dimen/layout_size_for_track_image_view"
+        android:layout_height="@dimen/layout_size_for_track_image_view"
+        android:layout_margin="@dimen/margin_for_track_image_view" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -44,9 +41,9 @@
             <TextView
                 android:id="@+id/artist_name"
                 style="@style/textViewForTrackAdditionalInfo"
-                android:maxLines="1"
-                android:ellipsize="end"
                 android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
                 tools:text="Track Artist" />
 
             <ImageView

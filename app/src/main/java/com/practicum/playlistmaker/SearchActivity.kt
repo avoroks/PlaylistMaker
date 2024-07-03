@@ -95,8 +95,7 @@ class SearchActivity : AppCompatActivity() {
         listener = OnSharedPreferenceChangeListener { _, key ->
             if (key == TRACK_HISTORY) {
                 val history = searchHistory.getHistory()
-                trackHistoryAdapter.data = history.toList()
-                trackHistoryAdapter.notifyDataSetChanged()
+                trackHistoryAdapter.updateData(history.toList())
                 if (history.isNotEmpty()) historyBlock.visibility = VISIBLE
             }
         }
