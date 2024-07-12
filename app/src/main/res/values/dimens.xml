@@ -24,8 +24,8 @@
     <dimen name="margin_top_for_search_activity_edittext_drawable">10dp</dimen>
     <dimen name="margin_end_for_search_activity_edittext_drawable">18dp</dimen>
     <dimen name="margin_top_for_recyclerview">24dp</dimen>
-    <dimen name="layout_height_for_track_image_view">45dp</dimen>
-    <dimen name="margin_vertical_for_track_image_view">8dp</dimen>
+    <dimen name="layout_size_for_track_image_view">45dp</dimen>
+    <dimen name="margin_for_track_image_view">8dp</dimen>
     <dimen name="padding_start_for_track_image_view">12dp</dimen>
     <dimen name="padding_end_for_track_image_view">8dp</dimen>
     <dimen name="margin_top_for_track_name_textview">14dp</dimen>
@@ -35,9 +35,11 @@
     <dimen name="layout_height_for_track_additional_info_delimiter">13dp</dimen>
     <dimen name="padding_horizontal_for_track_ic_arrow_forward">8dp</dimen>
     <dimen name="margin_top_for_error_image">102dp</dimen>
-    <dimen name="margin_top_for_error_text">16dp</dimen>
-    <dimen name="text_size_for_error">19sp</dimen>
-    <dimen name="margin_top_for_update_button">24dp</dimen>
-    <dimen name="text_size_for_update_button">14sp</dimen>
-    <dimen name="corner_radius_for_update_button">54dp</dimen>
+    <dimen name="margin_top_for_title_text">16dp</dimen>
+    <dimen name="text_size_for_title">19sp</dimen>
+    <dimen name="margin_top_for_action_button">24dp</dimen>
+    <dimen name="text_size_for_action_button">14sp</dimen>
+    <dimen name="corner_radius_for_action_button">54dp</dimen>
+    <dimen name="margin_top_for_history_rv">20dp</dimen>
+    <dimen name="margin_top_for_history_block">26dp</dimen>
 </resources>

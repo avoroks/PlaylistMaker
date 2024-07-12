@@ -73,4 +73,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />
+
+    <include
+        android:id="@+id/history"
+        layout="@layout/history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top_for_history_block"
+        android:visibility="gone"/>
 </LinearLayout>

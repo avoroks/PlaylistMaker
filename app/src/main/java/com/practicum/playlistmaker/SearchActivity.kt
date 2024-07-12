@@ -1,8 +1,11 @@
 package com.practicum.playlistmaker
 
 import android.content.Context
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -11,6 +14,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.data.Track
@@ -38,6 +42,14 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var connectionProblemBlock: LinearLayout
     private lateinit var emptyResultProblemBlock: LinearLayout
 
+    private lateinit var clearButton: ImageButton
+    private lateinit var editTextField: EditText
+    private lateinit var historyBlock: NestedScrollView
+
+    private lateinit var searchHistory: SearchHistory
+    private lateinit var trackAdapter: TrackAdapter
+    private lateinit var listener: OnSharedPreferenceChangeListener
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -48,17 +60,25 @@ class SearchActivity : AppCompatActivity() {
             this.finish()
         }
 
-        val clearButton = this.findViewById<ImageButton>(R.id.button_clear)
-        val editTextField = this.findViewById<EditText>(R.id.edittext_search)
+        clearButton = this.findViewById(R.id.button_clear)
+        editTextField = this.findViewById(R.id.edittext_search)
         editTextField.setText(textValue)
 
         connectionProblemBlock = findViewById(R.id.connection_problem)
         emptyResultProblemBlock = findViewById(R.id.empty_result)
 
-        val trackAdapter = TrackAdapter(trackList)
+        searchHistory = SearchHistory(getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE))
+
+        trackAdapter = TrackAdapter(trackList) {
+            searchHistory.saveTrackToHistory(it)
+        }
 
         val rvTracks = findViewById<RecyclerView>(R.id.rv_tracks)
         rvTracks.adapter = trackAdapter
+
+        val trackHistoryAdapter = TrackAdapter(searchHistory.getHistory().toList()){}
+        val rvHistoryTracks = findViewById<RecyclerView>(R.id.rv_history_tracks)
+        rvHistoryTracks.adapter = trackHistoryAdapter
 
         clearButton.setOnClickListener {
             editTextField.setText(EMPTY_TEXT)
@@ -68,22 +88,26 @@ class SearchActivity : AppCompatActivity() {
             hideErrorBlocks()
         }
 
-        editTextField.addTextChangedListener(
-            onTextChanged = { s, _, _, _ ->
-                textValue = s.toString()
-                clearButton.isVisible = !s.isNullOrEmpty()
-            }
-        )
+        historyBlock = findViewById(R.id.history)
 
-        editTextField.setOnEditorActionListener { view, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                findTracks(
-                    view.text.toString(),
-                    trackAdapter
-                )
-                true
+        editTextField.addListeners()
+
+        listener = OnSharedPreferenceChangeListener { _, key ->
+            if (key == TRACK_HISTORY) {
+                val history = searchHistory.getHistory()
+                trackHistoryAdapter.updateData(history.toList())
+                if (history.isNotEmpty()) historyBlock.visibility = VISIBLE
             }
-            false
+        }
+
+        getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE).registerOnSharedPreferenceChangeListener(listener)
+
+        val clearHistoryButton = findViewById<Button>(R.id.clear_history)
+
+        clearHistoryButton.setOnClickListener {
+            searchHistory.clearHistory()
+            trackHistoryAdapter.notifyDataSetChanged()
+            historyBlock.visibility = GONE
         }
 
         findViewById<Button>(R.id.update).apply {
@@ -142,6 +166,31 @@ class SearchActivity : AppCompatActivity() {
         listOf(connectionProblemBlock, emptyResultProblemBlock).forEach {
             it.isVisible = false
         }
+
+    private fun EditText.addListeners() {
+        this.addTextChangedListener(
+            onTextChanged = { s, _, _, _ ->
+                textValue = s.toString()
+                clearButton.isVisible = !s.isNullOrEmpty()
+                historyBlock.visibility = if (editTextField.hasFocus() && textValue.isEmpty()) VISIBLE else GONE
+            }
+        )
+
+        this.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && searchHistory.getHistory().isNotEmpty() && editTextField.text.isEmpty())  historyBlock.visibility = VISIBLE
+        }
+
+        this.setOnEditorActionListener { view, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                findTracks(
+                    view.text.toString(),
+                    trackAdapter
+                )
+                true
+            }
+            false
+        }
+    }
 
     private companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
