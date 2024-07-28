@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -71,12 +72,23 @@ class SearchActivity : AppCompatActivity() {
 
         trackAdapter = TrackAdapter(trackList) {
             searchHistory.saveTrackToHistory(it)
+
+            val intent = Intent(this, PlayerActivity::class.java).apply {
+                putExtra("TRACK", it)
+            }
+            this.startActivity(intent)
         }
 
         val rvTracks = findViewById<RecyclerView>(R.id.rv_tracks)
         rvTracks.adapter = trackAdapter
 
-        val trackHistoryAdapter = TrackAdapter(searchHistory.getHistory().toList()){}
+        val trackHistoryAdapter = TrackAdapter(searchHistory.getHistory().toList()){
+            val intent = Intent(this, PlayerActivity::class.java).apply {
+                putExtra("TRACK", it)
+            }
+            this.startActivity(intent)
+        }
+
         val rvHistoryTracks = findViewById<RecyclerView>(R.id.rv_history_tracks)
         rvHistoryTracks.adapter = trackHistoryAdapter
 
