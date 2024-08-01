@@ -180,11 +180,25 @@ class SearchActivity : AppCompatActivity() {
         }
 
     private fun EditText.addListeners() {
+        var isBackspaceClicked = false
+
         this.addTextChangedListener(
             onTextChanged = { s, _, _, _ ->
                 textValue = s.toString()
                 clearButton.isVisible = !s.isNullOrEmpty()
                 historyBlock.visibility = if (editTextField.hasFocus() && textValue.isEmpty()) VISIBLE else GONE
+            },
+            beforeTextChanged = {_, _, count, after ->
+                isBackspaceClicked = after < count
+            },
+            afterTextChanged = {s ->
+                textValue = s.toString()
+
+                if (isBackspaceClicked && textValue.isEmpty()) {
+                    historyBlock.visibility = VISIBLE
+                    trackList.clear()
+                    trackAdapter.notifyDataSetChanged()
+                }
             }
         )
 
