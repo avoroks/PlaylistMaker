@@ -91,4 +91,27 @@
         <item name="android:textSize">@dimen/text_size_for_action_button</item>
         <item name="cornerRadius">@dimen/corner_radius_for_action_button</item>
     </style>
+
+    <style name="playerButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/margin_bottom_for_player_activity_additional_buttons</item>
+        <item name="android:background">@drawable/round_button</item>
+    </style>
+
+    <style name="trackAttributesTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/track_additional_info_day_color</item>
+        <item name="android:textSize">@dimen/text_size_for_player_activity_track_additional_info</item>
+    </style>
+
+    <style name="trackInfoTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/text_size_for_player_activity_track_additional_info</item>
+        <item name="android:textColor">?attr/otherActivityHeaderColor</item>
+    </style>
 </resources>

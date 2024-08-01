@@ -17,6 +17,10 @@
     <attr name="actionButtonColor" format="color" />
     <attr name="actionButtonTextColor" format="color" />
 
+    <attr name="addIcon" format="reference" />
+    <attr name="addToFavoriteIcon" format="reference" />
+    <attr name="playIcon" format="reference" />
+
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="mainActivityColor">@color/main_light_color</item>
         <item name="mainActivityHeaderColor">@color/white</item>
@@ -37,5 +41,9 @@
         <item name="errorTextColor">@color/main_dark_color</item>
         <item name="actionButtonColor">@color/main_dark_color</item>
         <item name="actionButtonTextColor">@color/white</item>
+
+        <item name="addIcon">@drawable/ic_add_light_mode</item>
+        <item name="addToFavoriteIcon">@drawable/ic_add_to_favorite_light_mode</item>
+        <item name="playIcon">@drawable/ic_play_light_mode</item>
     </style>
 </resources>
