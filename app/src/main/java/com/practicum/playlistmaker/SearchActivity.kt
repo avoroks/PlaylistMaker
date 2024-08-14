@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
@@ -13,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
@@ -27,6 +30,14 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
+
+    private val searchRunnable = Runnable {
+        progressBar.visibility = VISIBLE
+        findTracks(editTextField.text.toString(), trackAdapter)
+    }
+
+    private val handler = Handler(Looper.getMainLooper())
+
     private val itunesBaseUrl = "https://itunes.apple.com"
 
     private val retrofit = Retrofit.Builder()
@@ -46,10 +57,13 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var clearButton: ImageButton
     private lateinit var editTextField: EditText
     private lateinit var historyBlock: NestedScrollView
+    private lateinit var progressBar: ProgressBar
 
     private lateinit var searchHistory: SearchHistory
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var listener: OnSharedPreferenceChangeListener
+
+    private var isClickAllowed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +75,7 @@ class SearchActivity : AppCompatActivity() {
             this.finish()
         }
 
+        progressBar = findViewById(R.id.progressBar)
         clearButton = this.findViewById(R.id.button_clear)
         editTextField = this.findViewById(R.id.edittext_search)
         editTextField.setText(textValue)
@@ -71,22 +86,26 @@ class SearchActivity : AppCompatActivity() {
         searchHistory = SearchHistory(getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE))
 
         trackAdapter = TrackAdapter(trackList) {
-            searchHistory.saveTrackToHistory(it)
+            if (clickDebounce()) {
+                searchHistory.saveTrackToHistory(it)
 
-            val intent = Intent(this, PlayerActivity::class.java).apply {
-                putExtra("TRACK", it)
+                val intent = Intent(this, PlayerActivity::class.java).apply {
+                    putExtra("TRACK", it)
+                }
+                this.startActivity(intent)
             }
-            this.startActivity(intent)
         }
 
         val rvTracks = findViewById<RecyclerView>(R.id.rv_tracks)
         rvTracks.adapter = trackAdapter
 
-        val trackHistoryAdapter = TrackAdapter(searchHistory.getHistory().toList()){
-            val intent = Intent(this, PlayerActivity::class.java).apply {
-                putExtra("TRACK", it)
+        val trackHistoryAdapter = TrackAdapter(searchHistory.getHistory().toList()) {
+            if (clickDebounce()) {
+                val intent = Intent(this, PlayerActivity::class.java).apply {
+                    putExtra("TRACK", it)
+                }
+                this.startActivity(intent)
             }
-            this.startActivity(intent)
         }
 
         val rvHistoryTracks = findViewById<RecyclerView>(R.id.rv_history_tracks)
@@ -112,7 +131,10 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE).registerOnSharedPreferenceChangeListener(listener)
+        getSharedPreferences(
+            PLAYLIST_MAKER_PREFERENCES,
+            MODE_PRIVATE
+        ).registerOnSharedPreferenceChangeListener(listener)
 
         val clearHistoryButton = findViewById<Button>(R.id.clear_history)
 
@@ -138,6 +160,7 @@ class SearchActivity : AppCompatActivity() {
             call: Call<TracksResponse>,
             response: Response<TracksResponse>
         ) {
+            progressBar.visibility = GONE
             trackList.clear()
             hideErrorBlocks()
 
@@ -151,6 +174,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+            progressBar.visibility = GONE
             trackList.clear()
             trackAdapter.notifyDataSetChanged()
 
@@ -186,16 +210,17 @@ class SearchActivity : AppCompatActivity() {
             onTextChanged = { s, _, _, _ ->
                 textValue = s.toString()
                 clearButton.isVisible = !s.isNullOrEmpty()
-                historyBlock.visibility = if (editTextField.hasFocus() && textValue.isEmpty()) VISIBLE else GONE
+                historyBlock.visibility = if (editTextField.hasFocus() && textValue.isEmpty() && searchHistory.getHistory().isNotEmpty()) VISIBLE else GONE
+                if (editTextField.hasFocus() && textValue.isNotEmpty()) searchDebounce()
             },
-            beforeTextChanged = {_, _, count, after ->
+            beforeTextChanged = { _, _, count, after ->
                 isBackspaceClicked = after < count
             },
-            afterTextChanged = {s ->
+            afterTextChanged = { s ->
                 textValue = s.toString()
 
                 if (isBackspaceClicked && textValue.isEmpty()) {
-                    historyBlock.visibility = VISIBLE
+                    historyBlock.visibility = if (searchHistory.getHistory().isNotEmpty()) VISIBLE else GONE
                     trackList.clear()
                     trackAdapter.notifyDataSetChanged()
                 }
@@ -203,7 +228,7 @@ class SearchActivity : AppCompatActivity() {
         )
 
         this.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus && searchHistory.getHistory().isNotEmpty() && editTextField.text.isEmpty())  historyBlock.visibility = VISIBLE
+            if (hasFocus && searchHistory.getHistory().isNotEmpty() && editTextField.text.isEmpty()) historyBlock.visibility = VISIBLE
         }
 
         this.setOnEditorActionListener { view, actionId, _ ->
@@ -218,9 +243,24 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, DEBOUNCE_DELAY)
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
     private companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val EMPTY_TEXT = ""
+        const val DEBOUNCE_DELAY = 2000L
     }
 }
 

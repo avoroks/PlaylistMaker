@@ -112,7 +112,7 @@
         android:id="@+id/playButton"
         style="@style/playerButton"
         android:layout_marginBottom="@dimen/margin_bottom_for_player_activity_play_button"
-        android:src="?attr/playIcon"
+        android:src="@drawable/ic_play"
         app:layout_constraintBottom_toTopOf="@id/horizontal_middle_guideline"
         app:layout_constraintEnd_toStartOf="@+id/addToFav"
         app:layout_constraintStart_toEndOf="@+id/addButton" />

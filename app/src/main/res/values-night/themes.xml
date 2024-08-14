@@ -22,6 +22,7 @@
 
         <item name="addIcon">@drawable/ic_add_night_mode</item>
         <item name="addToFavoriteIcon">@drawable/ic_add_to_favorite_night_mode</item>
-        <item name="playIcon">@drawable/ic_play_night_mode</item>
+
+        <item name="playerIconColor">@color/white</item>
     </style>
 </resources>
