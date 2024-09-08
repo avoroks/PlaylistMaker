@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.data
+package com.practicum.playlistmaker.domain.model
 
 import java.io.Serializable
 import java.text.SimpleDateFormat

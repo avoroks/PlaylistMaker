@@ -1,14 +1,15 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.data.db
 
 import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import com.google.gson.Gson
-import com.practicum.playlistmaker.data.Track
+import com.practicum.playlistmaker.data.dto.TrackDto
 import java.util.LinkedList
 
 internal const val TRACK_HISTORY = "track_history"
 
 class SearchHistory(private val sharedPreferences: SharedPreferences) {
-    fun saveTrackToHistory(track: Track) {
+    fun saveTrackToHistory(track: TrackDto) {
         val trackList = LinkedList(getHistory().toMutableList())
 
         trackList.remove((trackList.firstOrNull { it.trackId == track.trackId }))
@@ -19,10 +20,19 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
             .apply()
     }
 
-    fun getHistory(): Array<Track> {
+    fun getHistory(): Array<TrackDto> {
         val json = sharedPreferences.getString(TRACK_HISTORY, null) ?: return emptyArray()
-        return Gson().fromJson(json, Array<Track>::class.java)
+        return Gson().fromJson(json, Array<TrackDto>::class.java)
     }
 
     fun clearHistory() = sharedPreferences.edit().remove(TRACK_HISTORY).apply()
+
+    fun doActionWhenTrackHistoryChanged(action: () -> Unit) {
+        val listener = OnSharedPreferenceChangeListener { _, key ->
+            if (key == TRACK_HISTORY) {
+                action()
+            }
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+    }
 }

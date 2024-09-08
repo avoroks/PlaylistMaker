@@ -1,8 +1,7 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.tracks
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -21,33 +20,27 @@ import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.data.Track
-import com.practicum.playlistmaker.data.responses.TracksResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.practicum.playlistmaker.presentation.PlayerActivity
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.domain.model.Track
+import com.practicum.playlistmaker.domain.consumer.Consumer
+import com.practicum.playlistmaker.domain.consumer.ConsumerData
 
 class SearchActivity : AppCompatActivity() {
+
+    private val getTracksInteractor = Creator.provideTracksInteractor()
 
     private val searchRunnable = Runnable {
         progressBar.visibility = VISIBLE
         findTracks(editTextField.text.toString(), trackAdapter)
     }
 
+    private var runnableForMainThread: Runnable? = null
+
     private val handler = Handler(Looper.getMainLooper())
 
-    private val itunesBaseUrl = "https://itunes.apple.com"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
     private var textValue = EMPTY_TEXT
-
-    private val trackService = retrofit.create(ItunesApi::class.java)
 
     private val trackList = ArrayList<Track>()
 
@@ -59,14 +52,13 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historyBlock: NestedScrollView
     private lateinit var progressBar: ProgressBar
 
-    private lateinit var searchHistory: SearchHistory
     private lateinit var trackAdapter: TrackAdapter
-    private lateinit var listener: OnSharedPreferenceChangeListener
 
     private var isClickAllowed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_search)
 
         val backButton = this.findViewById<TextView>(R.id.back_from_search)
@@ -83,28 +75,19 @@ class SearchActivity : AppCompatActivity() {
         connectionProblemBlock = findViewById(R.id.connection_problem)
         emptyResultProblemBlock = findViewById(R.id.empty_result)
 
-        searchHistory = SearchHistory(getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE))
-
         trackAdapter = TrackAdapter(trackList) {
             if (clickDebounce()) {
-                searchHistory.saveTrackToHistory(it)
-
-                val intent = Intent(this, PlayerActivity::class.java).apply {
-                    putExtra("TRACK", it)
-                }
-                this.startActivity(intent)
+                getTracksInteractor.saveTrackToHistory(it)
+                openPlayer(it)
             }
         }
 
         val rvTracks = findViewById<RecyclerView>(R.id.rv_tracks)
         rvTracks.adapter = trackAdapter
 
-        val trackHistoryAdapter = TrackAdapter(searchHistory.getHistory().toList()) {
+        val trackHistoryAdapter = TrackAdapter(getTracksInteractor.getTrackHistory().toList()) {
             if (clickDebounce()) {
-                val intent = Intent(this, PlayerActivity::class.java).apply {
-                    putExtra("TRACK", it)
-                }
-                this.startActivity(intent)
+                openPlayer(it)
             }
         }
 
@@ -123,23 +106,16 @@ class SearchActivity : AppCompatActivity() {
 
         editTextField.addListeners()
 
-        listener = OnSharedPreferenceChangeListener { _, key ->
-            if (key == TRACK_HISTORY) {
-                val history = searchHistory.getHistory()
-                trackHistoryAdapter.updateData(history.toList())
-                if (history.isNotEmpty()) historyBlock.visibility = VISIBLE
-            }
+        getTracksInteractor.doActionWhenTrackHistoryChanged {
+            val history = getTracksInteractor.getTrackHistory()
+            trackHistoryAdapter.updateData(history.toList())
+            if (history.isNotEmpty()) historyBlock.visibility = VISIBLE
         }
-
-        getSharedPreferences(
-            PLAYLIST_MAKER_PREFERENCES,
-            MODE_PRIVATE
-        ).registerOnSharedPreferenceChangeListener(listener)
 
         val clearHistoryButton = findViewById<Button>(R.id.clear_history)
 
         clearHistoryButton.setOnClickListener {
-            searchHistory.clearHistory()
+            getTracksInteractor.clearTrackHistory()
             trackHistoryAdapter.notifyDataSetChanged()
             historyBlock.visibility = GONE
         }
@@ -151,37 +127,54 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun openPlayer(track: Track) {
+        val intent = Intent(this, PlayerActivity::class.java).apply {
+            putExtra(TRACK, track)
+        }
+        this.startActivity(intent)
+    }
+
     private fun findTracks(
         text: String,
         trackAdapter: TrackAdapter
-    ) = trackService.findTracks(text).enqueue(object :
-        Callback<TracksResponse> {
-        override fun onResponse(
-            call: Call<TracksResponse>,
-            response: Response<TracksResponse>
-        ) {
-            progressBar.visibility = GONE
-            trackList.clear()
-            hideErrorBlocks()
+    ) = getTracksInteractor.searchTracks(
+        expression = editTextField.text.toString(),
+        consumer = object : Consumer<List<Track>> {
+            override fun consume(data: ConsumerData<List<Track>>) {
+                val currentRunnable = runnableForMainThread
+                if (currentRunnable != null) {
+                    handler.removeCallbacks(currentRunnable)
+                }
 
-            if (response.isSuccessful) {
-                val results = response.body()?.results ?: emptyList()
-                if (results.isNotEmpty()) trackList.addAll(results)
-                if (trackList.isEmpty()) emptyResultProblemBlock.isVisible = true
-            } else connectionProblemBlock.isVisible = true
+                val newRunnable = Runnable {
+                    when (data) {
+                        is ConsumerData.Data -> {
+                            progressBar.visibility = GONE
+                            trackList.clear()
+                            hideErrorBlocks()
 
-            trackAdapter.notifyDataSetChanged()
+                            if (data.value.isNotEmpty()) trackList.addAll(data.value)
+                            if (trackList.isEmpty()) emptyResultProblemBlock.isVisible =
+                                true
+
+                            trackAdapter.notifyDataSetChanged()
+                        }
+
+                        is ConsumerData.Error -> {
+                            progressBar.visibility = GONE
+                            trackList.clear()
+                            trackAdapter.notifyDataSetChanged()
+
+                            hideErrorBlocks()
+                            connectionProblemBlock.isVisible = true
+                        }
+                    }
+                }
+                runnableForMainThread = newRunnable
+                handler.post(newRunnable)
+            }
         }
-
-        override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
-            progressBar.visibility = GONE
-            trackList.clear()
-            trackAdapter.notifyDataSetChanged()
-
-            hideErrorBlocks()
-            connectionProblemBlock.isVisible = true
-        }
-    })
+    )
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -210,7 +203,10 @@ class SearchActivity : AppCompatActivity() {
             onTextChanged = { s, _, _, _ ->
                 textValue = s.toString()
                 clearButton.isVisible = !s.isNullOrEmpty()
-                historyBlock.visibility = if (editTextField.hasFocus() && textValue.isEmpty() && searchHistory.getHistory().isNotEmpty()) VISIBLE else GONE
+                historyBlock.visibility =
+                    if (editTextField.hasFocus() && textValue.isEmpty() && getTracksInteractor.getTrackHistory()
+                            .isNotEmpty()
+                    ) VISIBLE else GONE
                 if (editTextField.hasFocus() && textValue.isNotEmpty()) searchDebounce()
             },
             beforeTextChanged = { _, _, count, after ->
@@ -220,7 +216,8 @@ class SearchActivity : AppCompatActivity() {
                 textValue = s.toString()
 
                 if (isBackspaceClicked && textValue.isEmpty()) {
-                    historyBlock.visibility = if (searchHistory.getHistory().isNotEmpty()) VISIBLE else GONE
+                    historyBlock.visibility =
+                        if (getTracksInteractor.getTrackHistory().isNotEmpty()) VISIBLE else GONE
                     trackList.clear()
                     trackAdapter.notifyDataSetChanged()
                 }
@@ -228,7 +225,9 @@ class SearchActivity : AppCompatActivity() {
         )
 
         this.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus && searchHistory.getHistory().isNotEmpty() && editTextField.text.isEmpty()) historyBlock.visibility = VISIBLE
+            if (hasFocus && getTracksInteractor.getTrackHistory()
+                    .isNotEmpty() && editTextField.text.isEmpty()
+            ) historyBlock.visibility = VISIBLE
         }
 
         this.setOnEditorActionListener { view, actionId, _ ->
@@ -261,6 +260,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val EMPTY_TEXT = ""
         const val DEBOUNCE_DELAY = 2000L
+        const val TRACK = "TRACK"
     }
 }
 
