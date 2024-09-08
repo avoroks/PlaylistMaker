@@ -51,6 +51,15 @@
             android:visibility="gone" />
     </FrameLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/size_for_search_activity_progress_bar"
+        android:layout_height="@dimen/size_for_search_activity_progress_bar"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_top_for_search_activity_progress_bar"
+        android:indeterminateTint="@color/cursor_color_for_search_activity_edittext"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_tracks"
         android:layout_width="match_parent"
@@ -80,5 +89,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top_for_history_block"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </LinearLayout>
