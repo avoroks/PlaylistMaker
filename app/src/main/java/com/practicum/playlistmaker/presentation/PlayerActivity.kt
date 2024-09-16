@@ -1,6 +1,5 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation
 
-import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -12,25 +11,17 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.internal.ViewUtils
-import com.practicum.playlistmaker.data.Track
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.domain.model.Track
+
 
 class PlayerActivity : AppCompatActivity() {
 
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-    }
-
-    private var playerState = STATE_DEFAULT
+    private val getPlayerInteractor = Creator.provideMediaPlayerInteractor()
 
     private lateinit var playButton: ImageButton
     private lateinit var trackProgress: TextView
-
-    private var mediaPlayer = MediaPlayer()
 
     private lateinit var track: Track
 
@@ -68,10 +59,26 @@ class PlayerActivity : AppCompatActivity() {
         playButton = findViewById(R.id.playButton)
         trackProgress = findViewById(R.id.trackTime)
 
-        preparePlayer()
+        getPlayerInteractor.preparePlayer(
+            track = track,
+            onCompletionAction = {
+                playButton.setImageResource(R.drawable.ic_play)
+                handler.removeCallbacks(createUpdateTrackTimeTask())
+                trackProgress.text = getString(R.string.default_zero_time)
+            }
+        )
 
         playButton.setOnClickListener {
-            playbackControl()
+            getPlayerInteractor.playbackControl(
+                onStartAction = {
+                    handler.post(createUpdateTrackTimeTask())
+                    playButton.setImageResource(R.drawable.ic_pause)
+                },
+                onPauseAction = {
+                    handler.removeCallbacks(createUpdateTrackTimeTask())
+                    playButton.setImageResource(R.drawable.ic_play)
+                }
+            )
         }
 
         val backButton = this.findViewById<MaterialToolbar>(R.id.back_from_player)
@@ -83,57 +90,26 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        getPlayerInteractor.pausePlayer()
+        playButton.setImageResource(R.drawable.ic_play)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(createUpdateTrackTimeTask())
-        mediaPlayer.release()
-    }
-
-    private fun playbackControl() =
-        when (playerState) {
-            STATE_PLAYING -> pausePlayer()
-            STATE_PREPARED, STATE_PAUSED -> startPlayer()
-            else -> {}
-        }
-
-    private fun preparePlayer() {
-        mediaPlayer.setDataSource(track.previewUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playerState = STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener {
-            playButton.setImageResource(R.drawable.ic_play)
-            playerState = STATE_PREPARED
-
-            handler.removeCallbacks(createUpdateTrackTimeTask())
-            trackProgress.text = "00:00"
-        }
-    }
-
-    private fun startPlayer() {
-        mediaPlayer.start()
-        handler.post(createUpdateTrackTimeTask())
-        playButton.setImageResource(R.drawable.ic_pause);
-        playerState = STATE_PLAYING
-    }
-
-    private fun pausePlayer() {
-        handler.removeCallbacks(createUpdateTrackTimeTask())
-        mediaPlayer.pause()
-        playButton.setImageResource(R.drawable.ic_play);
-        playerState = STATE_PAUSED
+        getPlayerInteractor.releaseResources()
     }
 
     private fun createUpdateTrackTimeTask() = object : Runnable {
         override fun run() {
-            if (playerState == STATE_PLAYING) {
-                trackProgress.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-                handler.postDelayed(this, 300L)
+            if (getPlayerInteractor.isPlayerActive()) {
+                trackProgress.text = getPlayerInteractor.getCurrentPlayerPosition()
+                handler.postDelayed(this, DELAY_FOR_UPDATE_TRACK_TIME)
             }
         }
+    }
+
+    companion object {
+        private const val DELAY_FOR_UPDATE_TRACK_TIME = 300L
     }
 }
