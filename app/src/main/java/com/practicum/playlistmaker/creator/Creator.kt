@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.creator
 
-import android.content.Context
+import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import com.practicum.playlistmaker.data.repository.TrackRepositoryImpl
 import com.practicum.playlistmaker.data.network.RetrofitNetworkClient
@@ -13,12 +13,12 @@ import com.practicum.playlistmaker.domain.use_case.TracksInteractorImpl
 const val PLAYLIST_MAKER_PREFERENCES = "PLAYLIST_MAKER_PREFERENCES"
 
 object Creator {
-    private lateinit var context: Context
-    fun setContext(context: Context) {
-        this.context = context
+    private lateinit var application: Application
+    fun setApp(application: Application) {
+        this.application = application
     }
 
-    private fun getSharedPreferences() = context.getSharedPreferences(
+    private fun getSharedPreferences() = application.getSharedPreferences(
         PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE
     )
 

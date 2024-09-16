@@ -9,6 +9,8 @@ import java.util.Locale
 class MediaPlayerInteractorImpl(private val repository: MediaPlayerRepository) :
     MediaPlayerInteractor {
 
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+
     override fun playbackControl(
         onStartAction: () -> Unit,
         onPauseAction: () -> Unit
@@ -32,5 +34,5 @@ class MediaPlayerInteractorImpl(private val repository: MediaPlayerRepository) :
     override fun releaseResources() = repository.releaseResources()
     override fun isPlayerActive() = repository.isPlayerActive()
     override fun getCurrentPlayerPosition(): String =
-        SimpleDateFormat("mm:ss", Locale.getDefault()).format(repository.getCurrentPlayerPosition())
+        dateFormat.format(repository.getCurrentPlayerPosition())
 }

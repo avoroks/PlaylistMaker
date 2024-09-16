@@ -104,8 +104,12 @@ class PlayerActivity : AppCompatActivity() {
         override fun run() {
             if (getPlayerInteractor.isPlayerActive()) {
                 trackProgress.text = getPlayerInteractor.getCurrentPlayerPosition()
-                handler.postDelayed(this, 300L)
+                handler.postDelayed(this, DELAY_FOR_UPDATE_TRACK_TIME)
             }
         }
+    }
+
+    companion object {
+        private const val DELAY_FOR_UPDATE_TRACK_TIME = 300L
     }
 }

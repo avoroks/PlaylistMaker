@@ -49,7 +49,7 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient, private val 
             track.previewUrl))
     }
 
-    override fun getHistory(): Array<Track> =
+    override fun getHistory(): List<Track> =
         SearchHistory(sharedPrefs).getHistory().map {
             Track(
                 it.trackName,
@@ -63,7 +63,7 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient, private val 
                 it.country,
                 it.previewUrl
             )
-        }.toTypedArray()
+        }.toList()
 
     override fun clearHistory() {
         SearchHistory(sharedPrefs).clearHistory()

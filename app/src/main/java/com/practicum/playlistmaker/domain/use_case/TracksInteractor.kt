@@ -6,7 +6,7 @@ import com.practicum.playlistmaker.domain.model.Track
 interface TracksInteractor {
     fun searchTracks(expression: String, consumer: Consumer<List<Track>>)
     fun saveTrackToHistory(track: Track)
-    fun getTrackHistory(): Array<Track>
+    fun getTrackHistory(): List<Track>
     fun clearTrackHistory()
     fun doActionWhenTrackHistoryChanged(action: () -> Unit)
 }

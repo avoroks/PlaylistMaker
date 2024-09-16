@@ -13,7 +13,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Creator.setContext(applicationContext)
+        Creator.setApp(this)
 
         darkTheme = settingsInteractor.isDarkThemeInSharedPreferences { isSystemDarkMode() }
         switchTheme(darkTheme)

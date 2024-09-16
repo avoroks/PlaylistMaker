@@ -20,7 +20,7 @@ class TracksInteractorImpl(private val repository: TrackRepository): TracksInter
     }
 
     override fun saveTrackToHistory(track: Track) = repository.saveTrackToHistory(track)
-    override fun getTrackHistory(): Array<Track> = repository.getHistory()
+    override fun getTrackHistory(): List<Track> = repository.getHistory()
     override fun clearTrackHistory() = repository.clearHistory()
     override fun doActionWhenTrackHistoryChanged(action: () -> Unit) = repository.doActionWhenTrackHistoryChanged(action)
 }
