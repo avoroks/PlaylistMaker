@@ -7,33 +7,32 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.internal.ViewUtils
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.domain.search.model.Track
 import com.practicum.playlistmaker.ui.player.state.PlayerState
 import com.practicum.playlistmaker.ui.player.view_model.PlayerViewModel
+import com.practicum.playlistmaker.utils.dpToPx
 
 
 class PlayerActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityPlayerBinding
+    private val binding by lazy { ActivityPlayerBinding.inflate(layoutInflater) }
 
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this,
+            PlayerViewModel.factory(track)
+        )[PlayerViewModel::class.java]
+    }
 
     private lateinit var track: Track
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         IntentCompat.getSerializableExtra(intent, "TRACK", Track::class.java)?.let { track = it }
-
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.factory(track)
-        )[PlayerViewModel::class.java]
 
         binding.track.text = track.trackName
         binding.author.text = track.artistName
@@ -48,7 +47,7 @@ class PlayerActivity : AppCompatActivity() {
             .placeholder(R.drawable.track_placeholder)
             .error(R.drawable.track_placeholder)
             .centerCrop()
-            .transform(RoundedCorners(ViewUtils.dpToPx(this, 8).toInt()))
+            .transform(RoundedCorners(this.dpToPx(8)))
             .into(findViewById(R.id.cover))
 
         binding.playButton.setOnClickListener {

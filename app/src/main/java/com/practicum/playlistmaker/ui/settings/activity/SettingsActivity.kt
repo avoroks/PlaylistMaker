@@ -14,17 +14,17 @@ import com.practicum.playlistmaker.domain.sharing.model.ExtraDataForSharing
 import com.practicum.playlistmaker.ui.settings.view_model.SettingsViewModel
 
 class SettingsActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySettingsBinding
-    private lateinit var viewModel: SettingsViewModel
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        viewModel = ViewModelProvider(
+    private val binding by lazy { ActivitySettingsBinding.inflate(layoutInflater) }
+    private val viewModel by lazy {
+        ViewModelProvider(
             this,
             SettingsViewModel.factory()
         )[SettingsViewModel::class.java]
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
 
         binding.backFromSettings.setOnClickListener {
             this.finish()

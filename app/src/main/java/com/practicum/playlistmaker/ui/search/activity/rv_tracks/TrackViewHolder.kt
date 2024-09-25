@@ -6,9 +6,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.google.android.material.internal.ViewUtils.dpToPx
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.search.model.Track
+import com.practicum.playlistmaker.utils.dpToPx
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackPoster: ImageView = itemView.findViewById(R.id.track_poster)
@@ -21,7 +21,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .load(item.artworkUrl100)
             .placeholder(R.drawable.track_placeholder)
             .fitCenter()
-            .transform(RoundedCorners(dpToPx(itemView.context, 2).toInt()))
+            .transform(RoundedCorners(itemView.context.dpToPx(2)))
             .into(trackPoster)
 
         trackName.text = item.trackName

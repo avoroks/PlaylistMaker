@@ -11,11 +11,12 @@ import com.practicum.playlistmaker.ui.settings.activity.SettingsActivity
 import com.practicum.playlistmaker.ui.search.activity.SearchActivity
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.buttonSearch.setOnClickListener {

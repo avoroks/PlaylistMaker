@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -21,10 +19,17 @@ import com.practicum.playlistmaker.ui.search.activity.rv_tracks.TrackAdapter
 import com.practicum.playlistmaker.ui.search.state.HistoryState
 import com.practicum.playlistmaker.ui.search.state.SearchState
 import com.practicum.playlistmaker.ui.search.view_model.SearchViewModel
+import com.practicum.playlistmaker.utils.gone
+import com.practicum.playlistmaker.utils.show
 
 class SearchActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySearchBinding
-    private lateinit var viewModel: SearchViewModel
+    private val binding by lazy { ActivitySearchBinding.inflate(layoutInflater) }
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this,
+            SearchViewModel.factory()
+        )[SearchViewModel::class.java]
+    }
 
     private val searchRunnable = Runnable {
         if (binding.edittextSearch.text.toString().isNotEmpty())
@@ -43,14 +48,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(
-            this,
-            SearchViewModel.factory()
-        )[SearchViewModel::class.java]
-
 
         binding.backFromSearch.setOnClickListener {
             this.finish()
@@ -86,7 +84,7 @@ class SearchActivity : AppCompatActivity() {
 
                 is HistoryState.EmptyHistory -> {
                     trackHistoryAdapter.submitList(emptyList())
-                    binding.history.root.visibility = GONE
+                    binding.history.root.gone()
                 }
             }
         }
@@ -95,32 +93,32 @@ class SearchActivity : AppCompatActivity() {
             hideErrorBlocks()
             when (searchState) {
                 is SearchState.Loading -> {
-                    binding.rvTracks.visibility = GONE
-                    binding.history.root.visibility = GONE
-                    binding.progressBar.visibility = VISIBLE
+                    binding.rvTracks.gone()
+                    binding.history.root.gone()
+                    binding.progressBar.show()
                 }
 
                 is SearchState.ConnectionProblem -> {
-                    binding.progressBar.visibility = GONE
-                    binding.rvTracks.visibility = GONE
-                    binding.history.root.visibility = GONE
-                    binding.connectionProblem.root.isVisible = true
+                    binding.progressBar.gone()
+                    binding.rvTracks.gone()
+                    binding.history.root.gone()
+                    binding.connectionProblem.root.show()
                 }
 
                 is SearchState.Content -> {
-                    binding.history.root.visibility = GONE
-                    binding.progressBar.visibility = GONE
+                    binding.history.root.gone()
+                    binding.progressBar.gone()
 
                     trackAdapter.submitList(searchState.trackList)
-                    binding.rvTracks.visibility = VISIBLE
+                    binding.rvTracks.show()
                 }
 
                 is SearchState.NothingFound -> {
-                    binding.progressBar.visibility = GONE
-                    binding.rvTracks.visibility = GONE
-                    binding.history.root.visibility = GONE
+                    binding.progressBar.gone()
+                    binding.rvTracks.gone()
+                    binding.history.root.gone()
 
-                    binding.emptyResult.root.isVisible = true
+                    binding.emptyResult.root.show()
                 }
             }
         }
@@ -165,7 +163,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun hideErrorBlocks() =
         listOf(binding.connectionProblem.root, binding.emptyResult.root).forEach {
-            it.isVisible = false
+            it.gone()
         }
 
     private fun EditText.addListeners() {
@@ -187,6 +185,7 @@ class SearchActivity : AppCompatActivity() {
                 if (isBackspaceClicked && textValue.isEmpty()) {
                     trackAdapter.submitList(null)
                     controlForHistoryVisibility()
+                    hideErrorBlocks()
                 }
             }
         )
@@ -205,10 +204,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun controlForHistoryVisibility() {
-        binding.history.root.visibility = if ((trackHistoryAdapter.itemCount != 0) &&
-            binding.edittextSearch.hasFocus() &&
-            binding.edittextSearch.text.isEmpty()
-        ) VISIBLE else GONE
+        with(binding.history.root) {
+            if ((trackHistoryAdapter.itemCount != 0) &&
+                binding.edittextSearch.hasFocus() &&
+                binding.edittextSearch.text.isEmpty()
+            ) show() else gone()
+        }
     }
 
     private fun clickDebounce(): Boolean {
