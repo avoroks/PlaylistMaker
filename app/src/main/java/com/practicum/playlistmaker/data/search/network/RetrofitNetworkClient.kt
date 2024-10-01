@@ -2,19 +2,8 @@ package com.practicum.playlistmaker.data.search.network
 
 import com.practicum.playlistmaker.data.search.dto.Response
 import com.practicum.playlistmaker.data.search.dto.TracksRequest
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitNetworkClient : NetworkClient {
-
-    private val itunesBaseUrl = "https://itunes.apple.com"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val trackService = retrofit.create(ItunesApi::class.java)
+class RetrofitNetworkClient(private val trackService: ItunesApi) : NetworkClient {
 
     override fun doRequest(dto: Any): Response {
         return if (dto is TracksRequest) {

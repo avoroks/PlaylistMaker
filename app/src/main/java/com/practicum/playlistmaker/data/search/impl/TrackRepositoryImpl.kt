@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.data.search.impl
 
-import android.content.SharedPreferences
 import com.practicum.playlistmaker.data.search.db.SearchHistory
 import com.practicum.playlistmaker.data.search.dto.TrackDto
 import com.practicum.playlistmaker.data.search.dto.TracksRequest
@@ -13,7 +12,7 @@ import java.lang.Exception
 
 class TrackRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val sharedPrefs: SharedPreferences
+    private val searchHistory: SearchHistory
 ) :
     TrackRepository {
     override fun searchTracks(expression: String): Resource<List<Track>> = try {
@@ -40,7 +39,7 @@ class TrackRepositoryImpl(
     }
 
     override fun saveTrackToHistory(track: Track) {
-        SearchHistory(sharedPrefs).saveTrackToHistory(
+        searchHistory.saveTrackToHistory(
             TrackDto(
                 track.trackName,
                 track.artistName,
@@ -57,7 +56,7 @@ class TrackRepositoryImpl(
     }
 
     override fun getHistory(): List<Track> =
-        SearchHistory(sharedPrefs).getHistory().map {
+        searchHistory.getHistory().map {
             Track(
                 it.trackName,
                 it.artistName,
@@ -73,6 +72,6 @@ class TrackRepositoryImpl(
         }.toList()
 
     override fun clearHistory() {
-        SearchHistory(sharedPrefs).clearHistory()
+        searchHistory.clearHistory()
     }
 }

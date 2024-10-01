@@ -8,19 +8,15 @@ import android.content.Intent.EXTRA_TEXT
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 import com.practicum.playlistmaker.domain.sharing.model.ExtraDataForSharing
 import com.practicum.playlistmaker.ui.settings.view_model.SettingsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
     private val binding by lazy { ActivitySettingsBinding.inflate(layoutInflater) }
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this,
-            SettingsViewModel.factory()
-        )[SettingsViewModel::class.java]
-    }
+    private val viewModel by viewModel<SettingsViewModel>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

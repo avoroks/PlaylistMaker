@@ -3,10 +3,6 @@ package com.practicum.playlistmaker.ui.search.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.domain.search.consumer.Consumer
 import com.practicum.playlistmaker.domain.search.consumer.ConsumerData
 import com.practicum.playlistmaker.domain.search.model.Track
@@ -63,17 +59,5 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
     fun clearHistory() {
         tracksInteractor.clearTrackHistory()
         historyState.postValue(HistoryState.EmptyHistory)
-    }
-
-    companion object {
-        fun factory(): ViewModelProvider.Factory {
-            return viewModelFactory {
-                initializer {
-                    SearchViewModel(
-                        Creator.provideTracksInteractor()
-                    )
-                }
-            }
-        }
     }
 }
