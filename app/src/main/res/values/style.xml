@@ -79,7 +79,7 @@
         <item name="android:textSize">@dimen/text_size_for_title</item>
     </style>
 
-    <style name="actionButtonOnSearchActivity">
+    <style name="actionButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
@@ -113,5 +113,10 @@
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">@dimen/text_size_for_player_activity_track_additional_info</item>
         <item name="android:textColor">?attr/otherActivityHeaderColor</item>
+    </style>
+
+    <style name="tabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 </resources>

@@ -56,4 +56,6 @@
     <dimen name="text_size_for_player_activity_track_additional_info">13sp</dimen>
     <dimen name="size_for_search_activity_progress_bar">44dp</dimen>
     <dimen name="margin_top_for_search_activity_progress_bar">140dp</dimen>
+    <dimen name="margin_top_for_empty_playlist_image">46dp</dimen>
+    <dimen name="text_size_for_tablayout">14sp</dimen>
 </resources>

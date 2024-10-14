@@ -24,7 +24,7 @@
 
         <Button
             android:id="@+id/clear_history"
-            style="@style/actionButtonOnSearchActivity"
+            style="@style/actionButton"
             android:text="@string/clear_history" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

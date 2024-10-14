@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,15 +5,9 @@
 
     <ImageView
         style="@style/imageViewForError"
-        android:src="?attr/connectionProblemImage" />
+        android:src="?attr/nothingFoundImage" />
 
     <TextView
         style="@style/textViewForTitle"
-        android:gravity="center"
-        android:text="@string/connection_problem" />
-
-    <Button
-        android:id="@+id/update"
-        style="@style/actionButton"
-        android:text="@string/update" />
+        android:text="@string/empty_favorite_tracks" />
 </LinearLayout>
