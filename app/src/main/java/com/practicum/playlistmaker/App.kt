@@ -5,7 +5,7 @@ import com.practicum.playlistmaker.di.dataModule
 import com.practicum.playlistmaker.di.interactorModule
 import com.practicum.playlistmaker.di.repositoryModule
 import com.practicum.playlistmaker.di.viewModelModule
-import com.practicum.playlistmaker.utils.applyTheme
+import com.practicum.playlistmaker.utils.ThemeHelper
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
@@ -19,6 +19,6 @@ class App : Application() {
             modules(dataModule, repositoryModule, interactorModule, viewModelModule)
         }
 
-        applyTheme(this@App)
+        ThemeHelper().applyTheme(this@App)
     }
 }

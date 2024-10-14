@@ -7,8 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.practicum.playlistmaker.domain.settings.use_case.SettingsInteractor
 import com.practicum.playlistmaker.domain.sharing.model.SharingDetails
 import com.practicum.playlistmaker.domain.sharing.use_case.SharingInteractor
-import com.practicum.playlistmaker.utils.isSystemDarkMode
-import com.practicum.playlistmaker.utils.setNightMode
+import com.practicum.playlistmaker.utils.ThemeHelper
 
 class SettingsViewModel(
     private val sharingInteractor: SharingInteractor,
@@ -23,7 +22,7 @@ class SettingsViewModel(
 
     init {
         isDarkThemeSelected.value =
-            settingsInteractor.isDarkThemeInSharedPreferences { isSystemDarkMode(application) }
+            settingsInteractor.isDarkThemeInSharedPreferences { ThemeHelper().isSystemDarkMode(application) }
     }
 
     fun shareApp() {
@@ -41,7 +40,7 @@ class SettingsViewModel(
     fun swithTheme(isDarkThemeSelected: Boolean) {
         this.isDarkThemeSelected.value = isDarkThemeSelected
         settingsInteractor.setThemeToSharedPreferences(isDarkThemeSelected)
-        setNightMode(isDarkThemeSelected)
+        ThemeHelper().setNightMode(isDarkThemeSelected)
     }
 
 }
