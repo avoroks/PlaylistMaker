@@ -4,9 +4,7 @@ import android.media.MediaPlayer
 import com.practicum.playlistmaker.domain.search.model.Track
 import com.practicum.playlistmaker.domain.player.repository.MediaPlayerRepository
 
-class MediaPlayerRepositoryImpl : MediaPlayerRepository {
-    private val mediaPlayer = MediaPlayer()
-
+class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPlayerRepository {
     companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
@@ -41,7 +39,9 @@ class MediaPlayerRepositoryImpl : MediaPlayerRepository {
     override fun isPlayerActive() = (playerState == STATE_PLAYING)
 
     override fun getCurrentPlayerPosition() = mediaPlayer.currentPosition
-    override fun releaseResources() = mediaPlayer.release()
+    override fun releaseResources() {
+        mediaPlayer.reset()
+    }
 
     override fun preparePlayer(
         track: Track,

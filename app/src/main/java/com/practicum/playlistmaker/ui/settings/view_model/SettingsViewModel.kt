@@ -4,16 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.domain.settings.use_case.SettingsInteractor
 import com.practicum.playlistmaker.domain.sharing.model.SharingDetails
 import com.practicum.playlistmaker.domain.sharing.use_case.SharingInteractor
-import com.practicum.playlistmaker.utils.isSystemDarkMode
-import com.practicum.playlistmaker.utils.setNightMode
+import com.practicum.playlistmaker.utils.ThemeHelper
 
 class SettingsViewModel(
     private val sharingInteractor: SharingInteractor,
@@ -28,7 +22,7 @@ class SettingsViewModel(
 
     init {
         isDarkThemeSelected.value =
-            settingsInteractor.isDarkThemeInSharedPreferences { isSystemDarkMode(application) }
+            settingsInteractor.isDarkThemeInSharedPreferences { ThemeHelper().isSystemDarkMode(application) }
     }
 
     fun shareApp() {
@@ -46,21 +40,7 @@ class SettingsViewModel(
     fun swithTheme(isDarkThemeSelected: Boolean) {
         this.isDarkThemeSelected.value = isDarkThemeSelected
         settingsInteractor.setThemeToSharedPreferences(isDarkThemeSelected)
-        setNightMode(isDarkThemeSelected)
-    }
-
-    companion object {
-        fun factory(): ViewModelProvider.Factory {
-            return viewModelFactory {
-                initializer {
-                    SettingsViewModel(
-                        Creator.provideSharingInteractor(),
-                        Creator.provideSettingsInteractor(),
-                        this[APPLICATION_KEY] as Application
-                    )
-                }
-            }
-        }
+        ThemeHelper().setNightMode(isDarkThemeSelected)
     }
 
 }

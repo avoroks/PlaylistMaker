@@ -8,8 +8,7 @@ import java.util.LinkedList
 
 internal const val TRACK_HISTORY = "track_history"
 
-class SearchHistory(private val sharedPreferences: SharedPreferences) {
-    private val gson = Gson()
+class SearchHistory(private val sharedPreferences: SharedPreferences, private val gson: Gson) {
 
     fun saveTrackToHistory(track: TrackDto) {
         val trackList = LinkedList(getHistory().toMutableList())

@@ -5,10 +5,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.domain.player.use_case.MediaPlayerInteractor
 import com.practicum.playlistmaker.domain.search.model.Track
 import com.practicum.playlistmaker.ui.player.state.PlayerState
@@ -73,16 +69,5 @@ class PlayerViewModel(
 
     companion object {
         private const val DELAY_FOR_UPDATE_TRACK_TIME = 300L
-
-        fun factory(track: Track): ViewModelProvider.Factory {
-            return viewModelFactory {
-                initializer {
-                    PlayerViewModel(
-                        track,
-                        Creator.provideMediaPlayerInteractor()
-                    )
-                }
-            }
-        }
     }
 }

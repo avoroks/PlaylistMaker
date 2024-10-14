@@ -3,7 +3,6 @@ package com.practicum.playlistmaker.ui.player.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.IntentCompat
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
@@ -13,17 +12,16 @@ import com.practicum.playlistmaker.domain.search.model.Track
 import com.practicum.playlistmaker.ui.player.state.PlayerState
 import com.practicum.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.practicum.playlistmaker.utils.dpToPx
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
 class PlayerActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityPlayerBinding.inflate(layoutInflater) }
 
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this,
-            PlayerViewModel.factory(track)
-        )[PlayerViewModel::class.java]
+    private val viewModel by viewModel<PlayerViewModel>() {
+        parametersOf(track)
     }
 
     private lateinit var track: Track

@@ -11,7 +11,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.ui.player.activity.PlayerActivity
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.domain.search.model.Track
@@ -21,15 +20,12 @@ import com.practicum.playlistmaker.ui.search.state.SearchState
 import com.practicum.playlistmaker.ui.search.view_model.SearchViewModel
 import com.practicum.playlistmaker.utils.gone
 import com.practicum.playlistmaker.utils.show
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
     private val binding by lazy { ActivitySearchBinding.inflate(layoutInflater) }
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this,
-            SearchViewModel.factory()
-        )[SearchViewModel::class.java]
-    }
+
+    private val viewModel by viewModel<SearchViewModel>()
 
     private val searchRunnable = Runnable {
         if (binding.edittextSearch.text.toString().isNotEmpty())
