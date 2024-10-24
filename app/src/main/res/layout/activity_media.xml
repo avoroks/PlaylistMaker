@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/otherActivityColor"
@@ -16,4 +17,22 @@
             style="@style/activityHeader"
             android:text="@string/media" />
     </LinearLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="@dimen/text_size_for_tablayout"
+        app:tabBackground="?attr/otherActivityColor"
+        app:tabIndicatorColor="?attr/otherActivityHeaderColor"
+        app:tabIndicatorFullWidth="true"
+        app:tabMode="fixed"
+        app:tabTextAppearance="@style/tabLayoutTextAppearance"
+        app:tabTextColor="?attr/otherActivityHeaderColor" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

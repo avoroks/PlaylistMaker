@@ -20,53 +20,29 @@
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/themeSwitcher"
+        style="@style/listElementForSettingsActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/listElementForSettingsActivity"
         android:text="@string/dark_mode"
         android:trackTintMode="src_over"
         app:thumbTint="@color/thumb_style"
         app:trackTint="@color/track_style" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/button_share"
+        style="@style/listElementForSettingsActivity"
+        android:drawableEnd="@drawable/ic_share"
+        android:text="@string/is_need_to_share" />
 
-        <TextView
-            style="@style/listElementForSettingsActivity"
-            android:text="@string/is_need_to_share" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/button_support"
+        style="@style/listElementForSettingsActivity"
+        android:drawableEnd="@drawable/ic_support"
+        android:text="@string/support" />
 
-        <ImageButton
-            android:id="@+id/button_share"
-            style="@style/imageButtonForSettingsActivity"
-            android:src="@drawable/ic_share" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            style="@style/listElementForSettingsActivity"
-            android:text="@string/support" />
-
-        <ImageButton
-            android:id="@+id/button_support"
-            style="@style/imageButtonForSettingsActivity"
-            android:src="@drawable/ic_support" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            style="@style/listElementForSettingsActivity"
-            android:text="@string/agreement" />
-
-        <ImageButton
-            android:id="@+id/button_userGuide"
-            style="@style/imageButtonForSettingsActivity"
-            android:src="@drawable/ic_arrow_forward" />
-    </FrameLayout>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/button_userGuide"
+        style="@style/listElementForSettingsActivity"
+        android:drawableEnd="@drawable/ic_arrow_forward"
+        android:text="@string/agreement" />
 </LinearLayout>
