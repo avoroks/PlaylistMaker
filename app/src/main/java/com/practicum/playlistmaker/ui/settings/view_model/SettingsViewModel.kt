@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.practicum.playlistmaker.domain.settings.use_case.SettingsInteractor
 import com.practicum.playlistmaker.domain.sharing.model.SharingDetails
 import com.practicum.playlistmaker.domain.sharing.use_case.SharingInteractor
+import com.practicum.playlistmaker.ui.utils.SingleEventLiveData
 import com.practicum.playlistmaker.utils.ThemeHelper
 
 class SettingsViewModel(
@@ -17,7 +18,7 @@ class SettingsViewModel(
     private val isDarkThemeSelected = MutableLiveData<Boolean>()
     fun getIsDarkThemeSelected(): LiveData<Boolean> = isDarkThemeSelected
 
-    private val sharingDetails = MutableLiveData<SharingDetails>()
+    private val sharingDetails = SingleEventLiveData<SharingDetails>()
     fun getSharingDetails(): LiveData<SharingDetails> = sharingDetails
 
     init {
