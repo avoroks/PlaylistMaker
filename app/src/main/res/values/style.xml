@@ -18,12 +18,9 @@
 
     <style name="listElementForSettingsActivity">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:backgroundTint">@color/white</item>
-        <item name="android:gravity">fill</item>
-        <item name="android:paddingVertical">@dimen/padding_vertical_for_settings_activity_list
-        </item>
-        <item name="android:paddingLeft">@dimen/padding_left_for_settings_activity_list</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingHorizontal">@dimen/padding_left_for_settings_activity_list</item>
+        <item name="android:paddingVertical">@dimen/padding_vertical_for_settings_activity_list</item>
         <item name="android:textColor">?attr/listElementsTextColor</item>
         <item name="android:textSize">@dimen/text_size</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
