@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="horizontal_indent_for_main_activity">16dp</dimen>
-    <dimen name="vertical_padding_for_main_activity_title">12dp</dimen>
-    <dimen name="top_margin_for_main_activity_button_layout">24dp</dimen>
-    <dimen name="bottom_margin_for_main_activity_button_layout">28dp</dimen>
-    <dimen name="layout_height_for_main_activity_buttons">0dp</dimen>
+    <dimen name="margin_for_header">16dp</dimen>
     <dimen name="text_size_for_titles">22sp</dimen>
     <dimen name="text_size">16sp</dimen>
     <dimen name="corner_radius_for_main_activity_buttons">16dp</dimen>

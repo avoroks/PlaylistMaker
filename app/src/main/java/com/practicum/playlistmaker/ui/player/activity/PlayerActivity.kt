@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.ui.player.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.content.IntentCompat
+import androidx.navigation.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
@@ -17,6 +17,7 @@ import org.koin.core.parameter.parametersOf
 
 
 class PlayerActivity : AppCompatActivity() {
+    private val args: PlayerActivityArgs by navArgs()
 
     private val binding by lazy { ActivityPlayerBinding.inflate(layoutInflater) }
 
@@ -30,7 +31,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        IntentCompat.getSerializableExtra(intent, "TRACK", Track::class.java)?.let { track = it }
+        track = args.track
 
         binding.track.text = track.trackName
         binding.author.text = track.artistName
