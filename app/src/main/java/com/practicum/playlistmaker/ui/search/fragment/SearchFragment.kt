@@ -30,9 +30,11 @@ class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
 
-    private val searchRunnable = Runnable {
-        if (binding.edittextSearch.text.toString().isNotEmpty())
-            viewModel.findTracks(binding.edittextSearch.text.toString())
+    private val searchRunnable by lazy {
+        Runnable {
+            if (binding.edittextSearch.text.toString().isNotEmpty())
+                viewModel.findTracks(binding.edittextSearch.text.toString())
+        }
     }
 
     private val handler = Handler(Looper.getMainLooper())
@@ -93,36 +95,40 @@ class SearchFragment : Fragment() {
         }
 
         viewModel.getSearchState().observe(viewLifecycleOwner) { searchState ->
-            hideErrorBlocks()
-            when (searchState) {
-                is SearchState.Loading -> {
-                    binding.rvTracks.gone()
-                    binding.history.root.gone()
-                    binding.progressBar.show()
-                }
+            if (binding.edittextSearch.text.isEmpty()) binding.rvTracks.gone() else {
+                hideErrorBlocks()
+                when (searchState) {
+                    is SearchState.Loading -> {
+                        binding.rvTracks.gone()
+                        binding.history.root.gone()
+                        binding.progressBar.show()
+                    }
 
-                is SearchState.ConnectionProblem -> {
-                    binding.progressBar.gone()
-                    binding.rvTracks.gone()
-                    binding.history.root.gone()
-                    binding.connectionProblem.root.show()
-                }
+                    is SearchState.ConnectionProblem -> {
+                        hideSoftKeyboard()
+                        binding.progressBar.gone()
+                        binding.rvTracks.gone()
+                        binding.history.root.gone()
+                        binding.connectionProblem.root.show()
+                    }
 
-                is SearchState.Content -> {
-                    hideSoftKeyboard()
-                    binding.history.root.gone()
-                    binding.progressBar.gone()
+                    is SearchState.Content -> {
+                        hideSoftKeyboard()
+                        binding.history.root.gone()
+                        binding.progressBar.gone()
 
-                    trackAdapter.submitList(searchState.trackList)
-                    binding.rvTracks.show()
-                }
+                        trackAdapter.submitList(searchState.trackList)
+                        binding.rvTracks.show()
+                    }
 
-                is SearchState.NothingFound -> {
-                    binding.progressBar.gone()
-                    binding.rvTracks.gone()
-                    binding.history.root.gone()
+                    is SearchState.NothingFound -> {
+                        hideSoftKeyboard()
+                        binding.progressBar.gone()
+                        binding.rvTracks.gone()
+                        binding.history.root.gone()
 
-                    binding.emptyResult.root.show()
+                        binding.emptyResult.root.show()
+                    }
                 }
             }
         }
@@ -189,6 +195,7 @@ class SearchFragment : Fragment() {
                     trackAdapter.submitList(null)
                     controlForHistoryVisibility()
                     hideErrorBlocks()
+                    hideSoftKeyboard()
                 }
             }
         )
