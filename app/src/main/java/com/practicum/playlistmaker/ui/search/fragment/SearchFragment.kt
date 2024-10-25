@@ -1,20 +1,22 @@
-package com.practicum.playlistmaker.ui.search.activity
+package com.practicum.playlistmaker.ui.search.fragment
 
 import android.content.Context
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import com.practicum.playlistmaker.ui.player.activity.PlayerActivity
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.domain.search.model.Track
-import com.practicum.playlistmaker.ui.search.activity.rv_tracks.TrackAdapter
+import com.practicum.playlistmaker.ui.search.fragment.rv_tracks.TrackAdapter
 import com.practicum.playlistmaker.ui.search.state.HistoryState
 import com.practicum.playlistmaker.ui.search.state.SearchState
 import com.practicum.playlistmaker.ui.search.view_model.SearchViewModel
@@ -22,14 +24,17 @@ import com.practicum.playlistmaker.utils.gone
 import com.practicum.playlistmaker.utils.show
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
-    private val binding by lazy { ActivitySearchBinding.inflate(layoutInflater) }
+class SearchFragment : Fragment() {
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel by viewModel<SearchViewModel>()
 
-    private val searchRunnable = Runnable {
-        if (binding.edittextSearch.text.toString().isNotEmpty())
-            viewModel.findTracks(binding.edittextSearch.text.toString())
+    private val searchRunnable by lazy {
+        Runnable {
+            if (binding.edittextSearch.text.toString().isNotEmpty())
+                viewModel.findTracks(binding.edittextSearch.text.toString())
+        }
     }
 
     private val handler = Handler(Looper.getMainLooper())
@@ -40,15 +45,19 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackHistoryAdapter: TrackAdapter
 
     private var isClickAllowed = true
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        setContentView(binding.root)
-
-        binding.backFromSearch.setOnClickListener {
-            this.finish()
-        }
+        textValue = savedInstanceState?.getString(SEARCH_TEXT, EMPTY_TEXT) ?: ""
 
         binding.edittextSearch.setText(textValue)
 
@@ -71,7 +80,7 @@ class SearchActivity : AppCompatActivity() {
             viewModel.clearHistory()
         }
 
-        viewModel.getHistoryState().observe(this) { historyState ->
+        viewModel.getHistoryState().observe(viewLifecycleOwner) { historyState ->
             trackHistoryAdapter.submitList(null)
             when (historyState) {
                 is HistoryState.Content -> {
@@ -85,36 +94,41 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.getSearchState().observe(this) { searchState ->
-            hideErrorBlocks()
-            when (searchState) {
-                is SearchState.Loading -> {
-                    binding.rvTracks.gone()
-                    binding.history.root.gone()
-                    binding.progressBar.show()
-                }
+        viewModel.getSearchState().observe(viewLifecycleOwner) { searchState ->
+            if (binding.edittextSearch.text.isEmpty()) binding.rvTracks.gone() else {
+                hideErrorBlocks()
+                when (searchState) {
+                    is SearchState.Loading -> {
+                        binding.rvTracks.gone()
+                        binding.history.root.gone()
+                        binding.progressBar.show()
+                    }
 
-                is SearchState.ConnectionProblem -> {
-                    binding.progressBar.gone()
-                    binding.rvTracks.gone()
-                    binding.history.root.gone()
-                    binding.connectionProblem.root.show()
-                }
+                    is SearchState.ConnectionProblem -> {
+                        hideSoftKeyboard()
+                        binding.progressBar.gone()
+                        binding.rvTracks.gone()
+                        binding.history.root.gone()
+                        binding.connectionProblem.root.show()
+                    }
 
-                is SearchState.Content -> {
-                    binding.history.root.gone()
-                    binding.progressBar.gone()
+                    is SearchState.Content -> {
+                        hideSoftKeyboard()
+                        binding.history.root.gone()
+                        binding.progressBar.gone()
 
-                    trackAdapter.submitList(searchState.trackList)
-                    binding.rvTracks.show()
-                }
+                        trackAdapter.submitList(searchState.trackList)
+                        binding.rvTracks.show()
+                    }
 
-                is SearchState.NothingFound -> {
-                    binding.progressBar.gone()
-                    binding.rvTracks.gone()
-                    binding.history.root.gone()
+                    is SearchState.NothingFound -> {
+                        hideSoftKeyboard()
+                        binding.progressBar.gone()
+                        binding.rvTracks.gone()
+                        binding.history.root.gone()
 
-                    binding.emptyResult.root.show()
+                        binding.emptyResult.root.show()
+                    }
                 }
             }
         }
@@ -122,7 +136,7 @@ class SearchActivity : AppCompatActivity() {
         binding.buttonClear.setOnClickListener {
             trackAdapter.submitList(null)
             binding.edittextSearch.setText(EMPTY_TEXT)
-            hideSoftKeyboard(binding.edittextSearch)
+            hideSoftKeyboard()
             hideErrorBlocks()
         }
 
@@ -135,11 +149,14 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
+
     private fun openPlayer(track: Track) {
-        val intent = Intent(this, PlayerActivity::class.java).apply {
-            putExtra(TRACK, track)
-        }
-        this.startActivity(intent)
+        val action = SearchFragmentDirections.actionSearchFragmentToPlayerActivity(track)
+        this.findNavController().navigate(action)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -147,14 +164,10 @@ class SearchActivity : AppCompatActivity() {
         outState.putString(SEARCH_TEXT, textValue)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        textValue = savedInstanceState.getString(SEARCH_TEXT, EMPTY_TEXT)
-    }
-
-    private fun hideSoftKeyboard(input: EditText) {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(input.windowToken, 0);
+    private fun hideSoftKeyboard() {
+        val imm =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.edittextSearch.windowToken, 0);
     }
 
     private fun hideErrorBlocks() =
@@ -182,6 +195,7 @@ class SearchActivity : AppCompatActivity() {
                     trackAdapter.submitList(null)
                     controlForHistoryVisibility()
                     hideErrorBlocks()
+                    hideSoftKeyboard()
                 }
             }
         )
@@ -226,7 +240,5 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val EMPTY_TEXT = ""
         const val DEBOUNCE_DELAY = 2000L
-        const val TRACK = "TRACK"
     }
 }
-

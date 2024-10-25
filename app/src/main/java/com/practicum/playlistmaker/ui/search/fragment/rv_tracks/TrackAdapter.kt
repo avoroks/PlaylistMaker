@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.ui.search.activity.rv_tracks
+package com.practicum.playlistmaker.ui.search.fragment.rv_tracks
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
