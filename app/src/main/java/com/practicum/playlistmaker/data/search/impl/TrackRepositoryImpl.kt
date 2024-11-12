@@ -8,34 +8,43 @@ import com.practicum.playlistmaker.data.search.network.NetworkClient
 import com.practicum.playlistmaker.domain.search.Resource
 import com.practicum.playlistmaker.domain.search.repository.TrackRepository
 import com.practicum.playlistmaker.domain.search.model.Track
+import kotlinx.coroutines.flow.flow
 import java.lang.Exception
+import java.util.concurrent.Flow
 
 class TrackRepositoryImpl(
     private val networkClient: NetworkClient,
     private val searchHistory: SearchHistory
 ) :
     TrackRepository {
-    override fun searchTracks(expression: String): Resource<List<Track>> = try {
+    override fun searchTracks(expression: String) = flow {
+
         val response = networkClient.doRequest(TracksRequest(expression))
-        if (response is TracksResponse && response.resultCode == 200) {
-            val trackList = response.results.map {
-                Track(
-                    it.trackName,
-                    it.artistName,
-                    it.trackTimeMillis,
-                    it.artworkUrl100,
-                    it.trackId,
-                    it.collectionName,
-                    it.releaseDate,
-                    it.primaryGenreName,
-                    it.country,
-                    it.previewUrl
-                )
+
+        when (response.resultCode) {
+            200 -> {
+                with(response as TracksResponse) {
+                    val trackList = response.results.map {
+                        Track(
+                            it.trackName,
+                            it.artistName,
+                            it.trackTimeMillis,
+                            it.artworkUrl100,
+                            it.trackId,
+                            it.collectionName,
+                            it.releaseDate,
+                            it.primaryGenreName,
+                            it.country,
+                            it.previewUrl
+                        )
+                    }
+                    emit(Resource.Success(trackList))
+                }
             }
-            Resource.Success(trackList)
-        } else Resource.Error("Произошла сетевая ошибка")
-    } catch (e: Exception) {
-        Resource.Error("Произошла сетевая ошибка")
+            else -> {
+                emit(Resource.Error("Произошла сетевая ошибка"))
+            }
+        }
     }
 
     override fun saveTrackToHistory(track: Track) {

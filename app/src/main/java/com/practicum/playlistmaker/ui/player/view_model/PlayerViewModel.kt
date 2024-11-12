@@ -1,30 +1,32 @@
 package com.practicum.playlistmaker.ui.player.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.domain.player.use_case.MediaPlayerInteractor
 import com.practicum.playlistmaker.domain.search.model.Track
 import com.practicum.playlistmaker.ui.player.state.PlayerState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(
-    private val track: Track,
+    track: Track,
     private val playerInteractor: MediaPlayerInteractor
 ) : ViewModel() {
 
     private val playerState = MutableLiveData<PlayerState>()
     fun getPlayerState(): LiveData<PlayerState> = playerState
 
-    private val handler = Handler(Looper.getMainLooper())
+    private var timerJob: Job? = null
 
     init {
         playerInteractor.preparePlayer(
             track = track,
             onCompletionAction = {
-                handler.removeCallbacks(createUpdateTrackTimeTask())
                 playerState.value = PlayerState.TrackEnded
+                timerJob?.cancel()
 
             }
         )
@@ -34,11 +36,11 @@ class PlayerViewModel(
     fun playBackControl() {
         playerInteractor.playbackControl(
             onStartAction = {
-                handler.post(createUpdateTrackTimeTask())
+                createUpdateTrackTimeTask()
             },
             onPauseAction = {
-                handler.removeCallbacks(createUpdateTrackTimeTask())
                 playerState.value = PlayerState.Paused
+                timerJob?.cancel()
             }
         )
     }
@@ -46,26 +48,26 @@ class PlayerViewModel(
     fun pausePlayer() {
         playerInteractor.pausePlayer()
         playerState.value = PlayerState.Paused
+        timerJob?.cancel()
     }
 
     fun stopPlayer() {
-        handler.removeCallbacks(createUpdateTrackTimeTask())
         playerInteractor.releaseResources()
+        timerJob?.cancel()
     }
 
-    private fun createUpdateTrackTimeTask() = object : Runnable {
-        override fun run() {
-            if (playerInteractor.isPlayerActive()) {
+    private fun createUpdateTrackTimeTask() {
+        timerJob = viewModelScope.launch {
+            while (playerInteractor.isPlayerActive()) {
+                delay(DELAY_FOR_UPDATE_TRACK_TIME)
                 playerState.postValue(
                     PlayerState.Playing(
                         trackTime = playerInteractor.getCurrentPlayerPosition().toString()
                     )
                 )
-                handler.postDelayed(this, DELAY_FOR_UPDATE_TRACK_TIME)
             }
         }
     }
-
 
     companion object {
         private const val DELAY_FOR_UPDATE_TRACK_TIME = 300L
