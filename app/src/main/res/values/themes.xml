@@ -21,6 +21,7 @@
     <attr name="addToFavoriteIcon" format="reference" />
 
     <attr name="playerIconColor" format="color" />
+    <attr name="bottomNavViewBorderColor" format="color" />
 
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="mainActivityColor">@color/main_light_color</item>
@@ -47,5 +48,7 @@
         <item name="addToFavoriteIcon">@drawable/ic_add_to_favorite_light_mode</item>
 
         <item name="playerIconColor">@color/main_dark_color</item>
+
+        <item name="bottomNavViewBorderColor">@color/bottom_nav_view_border_day_color</item>
     </style>
 </resources>

@@ -20,6 +20,7 @@ import com.practicum.playlistmaker.ui.search.state.HistoryState
 import com.practicum.playlistmaker.ui.search.state.SearchState
 import com.practicum.playlistmaker.ui.search.view_model.SearchViewModel
 import com.practicum.playlistmaker.utils.debounce
+import com.practicum.playlistmaker.utils.debounceWithoutParamsInAction
 import com.practicum.playlistmaker.utils.gone
 import com.practicum.playlistmaker.utils.show
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,7 +37,7 @@ class SearchFragment : Fragment() {
     private lateinit var trackHistoryAdapter: TrackAdapter
 
     private lateinit var onTrackClickDebounce: (Track) -> Unit
-    private lateinit var onSearchDebounce: (String) -> Unit
+    private lateinit var onSearchDebounce: () -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,8 +56,9 @@ class SearchFragment : Fragment() {
             openPlayer(it)
         }
 
-        onSearchDebounce = debounce(DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) {
-            if (it.isNotEmpty()) viewModel.findTracks(it)
+        onSearchDebounce = debounceWithoutParamsInAction(DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) {
+            val text = binding.edittextSearch.text.toString()
+            if (text.isNotEmpty()) viewModel.findTracks(text)
         }
 
         textValue = savedInstanceState?.getString(SEARCH_TEXT, EMPTY_TEXT) ?: ""
@@ -180,9 +182,7 @@ class SearchFragment : Fragment() {
                 textValue = s.toString()
                 binding.buttonClear.isVisible = textValue.isNotBlank()
                 controlForHistoryVisibility()
-                if (binding.edittextSearch.hasFocus() && textValue.isNotBlank()) onSearchDebounce(
-                    binding.edittextSearch.text.toString()
-                )
+                if (binding.edittextSearch.hasFocus() && textValue.isNotBlank()) onSearchDebounce()
             },
             beforeTextChanged = { _, _, count, after ->
                 isBackspaceClicked = after < count

@@ -24,5 +24,7 @@
         <item name="addToFavoriteIcon">@drawable/ic_add_to_favorite_night_mode</item>
 
         <item name="playerIconColor">@color/white</item>
+
+        <item name="bottomNavViewBorderColor">@color/white</item>
     </style>
 </resources>
