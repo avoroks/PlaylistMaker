@@ -21,6 +21,6 @@ class TracksInteractorImpl(private val repository: TrackRepository) : TracksInte
     }
 
     override fun saveTrackToHistory(track: Track) = repository.saveTrackToHistory(track)
-    override fun getTrackHistory(): List<Track> = repository.getHistory()
+    override fun getTrackHistory(): Flow<List<Track>> = repository.getHistory()
     override fun clearTrackHistory() = repository.clearHistory()
 }

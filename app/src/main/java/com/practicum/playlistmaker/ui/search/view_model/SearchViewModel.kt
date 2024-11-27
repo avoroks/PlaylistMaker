@@ -20,9 +20,14 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
 
 
     init {
-        val history = tracksInteractor.getTrackHistory()
-        historyState.value = if (history.isEmpty()) HistoryState.EmptyHistory else
-            HistoryState.Content(history)
+        updateHistory()
+    }
+
+    fun updateHistory() = viewModelScope.launch {
+        tracksInteractor.getTrackHistory().collect {
+            historyState.value = if (it.isEmpty()) HistoryState.EmptyHistory else
+                HistoryState.Content(it)
+        }
     }
 
     fun findTracks(text: String) {
@@ -45,8 +50,11 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
 
     fun saveTrackToHistory(track: Track) {
         tracksInteractor.saveTrackToHistory(track)
-        val tracks = tracksInteractor.getTrackHistory()
-        historyState.postValue(HistoryState.Content(tracks))
+        viewModelScope.launch {
+            tracksInteractor.getTrackHistory().collect {
+                historyState.postValue(HistoryState.Content(it))
+            }
+        }
     }
 
     fun clearHistory() {

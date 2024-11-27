@@ -76,6 +76,14 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
+        binding.addToFav.setOnClickListener {
+            viewModel.onFavoriteClicked()
+        }
+
+        viewModel.getIsTrackAddedToFavoriteState().observe(this) {
+            changeFavIcon(it)
+        }
+
         val backButton = this.findViewById<MaterialToolbar>(R.id.back_from_player)
 
         backButton.setOnClickListener {
@@ -91,5 +99,13 @@ class PlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.stopPlayer()
+    }
+
+    fun changeFavIcon(isFav: Boolean) {
+        val icon = when (isFav) {
+            true -> R.drawable.ic_added_to_favorite
+            else -> R.drawable.ic_add_to_favorite
+        }
+        binding.addToFav.setImageResource(icon)
     }
 }

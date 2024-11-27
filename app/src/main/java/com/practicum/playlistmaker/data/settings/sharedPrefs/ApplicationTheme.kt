@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.data.settings.db
+package com.practicum.playlistmaker.data.settings.sharedPrefs
 
 import android.content.SharedPreferences
 
