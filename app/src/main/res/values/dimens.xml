@@ -54,4 +54,5 @@
     <dimen name="margin_top_for_search_activity_progress_bar">140dp</dimen>
     <dimen name="margin_top_for_empty_playlist_image">46dp</dimen>
     <dimen name="text_size_for_tablayout">14sp</dimen>
+    <dimen name="bottom_nav_view_border_size">0.5dp</dimen>
 </resources>

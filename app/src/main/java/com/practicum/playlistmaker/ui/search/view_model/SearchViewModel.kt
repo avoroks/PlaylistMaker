@@ -3,12 +3,12 @@ package com.practicum.playlistmaker.ui.search.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.practicum.playlistmaker.domain.search.consumer.Consumer
-import com.practicum.playlistmaker.domain.search.consumer.ConsumerData
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.domain.search.model.Track
 import com.practicum.playlistmaker.domain.search.use_case.TracksInteractor
 import com.practicum.playlistmaker.ui.search.state.HistoryState
 import com.practicum.playlistmaker.ui.search.state.SearchState
+import kotlinx.coroutines.launch
 
 class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewModel() {
 
@@ -20,40 +20,41 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor) : ViewMode
 
 
     init {
-        val history = tracksInteractor.getTrackHistory()
-        historyState.value = if (history.isEmpty()) HistoryState.EmptyHistory else
-            HistoryState.Content(history)
+        updateHistory()
+    }
+
+    fun updateHistory() = viewModelScope.launch {
+        tracksInteractor.getTrackHistory().collect {
+            historyState.value = if (it.isEmpty()) HistoryState.EmptyHistory else
+                HistoryState.Content(it)
+        }
     }
 
     fun findTracks(text: String) {
         searchState.postValue(SearchState.Loading)
-        tracksInteractor.searchTracks(
-            expression = text,
-            consumer = object : Consumer<List<Track>> {
-                override fun consume(data: ConsumerData<List<Track>>) {
-                    when (data) {
-                        is ConsumerData.Data -> {
-                            if (data.value.isNotEmpty()) searchState.postValue(
-                                SearchState.Content(
-                                    data.value
-                                )
-                            )
-                            else searchState.postValue(SearchState.NothingFound)
-                        }
 
-                        is ConsumerData.Error -> {
-                            searchState.postValue(SearchState.ConnectionProblem)
-                        }
+        viewModelScope.launch {
+            tracksInteractor
+                .searchTracks(text)
+                .collect { pair ->
+                    val trackList = pair.first
+                    val error = pair.second
+                    when {
+                        (trackList?.isEmpty() == true) -> searchState.postValue(SearchState.NothingFound)
+                        (error != null) -> searchState.postValue(SearchState.ConnectionProblem)
+                        else -> searchState.postValue(SearchState.Content(pair.first!!))
                     }
                 }
-            }
-        )
+        }
     }
 
     fun saveTrackToHistory(track: Track) {
         tracksInteractor.saveTrackToHistory(track)
-        val tracks = tracksInteractor.getTrackHistory()
-        historyState.postValue(HistoryState.Content(tracks))
+        viewModelScope.launch {
+            tracksInteractor.getTrackHistory().collect {
+                historyState.postValue(HistoryState.Content(it))
+            }
+        }
     }
 
     fun clearHistory() {

@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.data.search.impl
 
-import com.practicum.playlistmaker.data.search.db.SearchHistory
+import com.practicum.playlistmaker.data.media.db.AppDatabase
+import com.practicum.playlistmaker.data.search.sharedPrefs.SearchHistory
 import com.practicum.playlistmaker.data.search.dto.TrackDto
 import com.practicum.playlistmaker.data.search.dto.TracksRequest
 import com.practicum.playlistmaker.data.search.dto.TracksResponse
@@ -8,34 +9,49 @@ import com.practicum.playlistmaker.data.search.network.NetworkClient
 import com.practicum.playlistmaker.domain.search.Resource
 import com.practicum.playlistmaker.domain.search.repository.TrackRepository
 import com.practicum.playlistmaker.domain.search.model.Track
-import java.lang.Exception
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class TrackRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val searchHistory: SearchHistory
+    private val searchHistory: SearchHistory,
+    private val db: AppDatabase
 ) :
     TrackRepository {
-    override fun searchTracks(expression: String): Resource<List<Track>> = try {
+    override fun searchTracks(expression: String) = flow {
+
         val response = networkClient.doRequest(TracksRequest(expression))
-        if (response is TracksResponse && response.resultCode == 200) {
-            val trackList = response.results.map {
-                Track(
-                    it.trackName,
-                    it.artistName,
-                    it.trackTimeMillis,
-                    it.artworkUrl100,
-                    it.trackId,
-                    it.collectionName,
-                    it.releaseDate,
-                    it.primaryGenreName,
-                    it.country,
-                    it.previewUrl
-                )
+
+        when (response.resultCode) {
+            200 -> {
+                with(response as TracksResponse) {
+                    val trackList = response.results.map {
+                        Track(
+                            it.trackName,
+                            it.artistName,
+                            it.trackTimeMillis,
+                            it.artworkUrl100,
+                            it.trackId,
+                            it.collectionName,
+                            it.releaseDate,
+                            it.primaryGenreName,
+                            it.country,
+                            it.previewUrl
+                        )
+                    }
+                    val favoriteTracks = db.trackDao().getIdTracks()
+
+                    trackList.filter { it.trackId in favoriteTracks }
+                        .forEach { it.isFavorite = true }
+
+                    emit(Resource.Success(trackList))
+                }
             }
-            Resource.Success(trackList)
-        } else Resource.Error("Произошла сетевая ошибка")
-    } catch (e: Exception) {
-        Resource.Error("Произошла сетевая ошибка")
+
+            else -> {
+                emit(Resource.Error("Произошла сетевая ошибка"))
+            }
+        }
     }
 
     override fun saveTrackToHistory(track: Track) {
@@ -55,8 +71,8 @@ class TrackRepositoryImpl(
         )
     }
 
-    override fun getHistory(): List<Track> =
-        searchHistory.getHistory().map {
+    override fun getHistory(): Flow<List<Track>> = flow {
+        val tracks = searchHistory.getHistory().map {
             Track(
                 it.trackName,
                 it.artistName,
@@ -70,6 +86,14 @@ class TrackRepositoryImpl(
                 it.previewUrl
             )
         }.toList()
+
+        val favoriteTracks = db.trackDao().getIdTracks()
+
+        tracks.filter { it.trackId in favoriteTracks }
+            .forEach { it.isFavorite = true }
+
+        emit(tracks)
+    }
 
     override fun clearHistory() {
         searchHistory.clearHistory()

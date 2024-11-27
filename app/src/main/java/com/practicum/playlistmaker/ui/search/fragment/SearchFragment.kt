@@ -2,8 +2,6 @@ package com.practicum.playlistmaker.ui.search.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +11,7 @@ import android.widget.EditText
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.domain.search.model.Track
@@ -20,6 +19,8 @@ import com.practicum.playlistmaker.ui.search.fragment.rv_tracks.TrackAdapter
 import com.practicum.playlistmaker.ui.search.state.HistoryState
 import com.practicum.playlistmaker.ui.search.state.SearchState
 import com.practicum.playlistmaker.ui.search.view_model.SearchViewModel
+import com.practicum.playlistmaker.utils.debounce
+import com.practicum.playlistmaker.utils.debounceWithoutParamsInAction
 import com.practicum.playlistmaker.utils.gone
 import com.practicum.playlistmaker.utils.show
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,21 +31,14 @@ class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
 
-    private val searchRunnable by lazy {
-        Runnable {
-            if (binding.edittextSearch.text.toString().isNotEmpty())
-                viewModel.findTracks(binding.edittextSearch.text.toString())
-        }
-    }
-
-    private val handler = Handler(Looper.getMainLooper())
-
     private var textValue = EMPTY_TEXT
 
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var trackHistoryAdapter: TrackAdapter
 
-    private var isClickAllowed = true
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
+    private lateinit var onSearchDebounce: () -> Unit
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,22 +51,27 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        onTrackClickDebounce = debounce(DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) {
+            viewModel.saveTrackToHistory(it)
+            openPlayer(it)
+        }
+
+        onSearchDebounce = debounceWithoutParamsInAction(DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) {
+            val text = binding.edittextSearch.text.toString()
+            if (text.isNotEmpty()) viewModel.findTracks(text)
+        }
+
         textValue = savedInstanceState?.getString(SEARCH_TEXT, EMPTY_TEXT) ?: ""
 
         binding.edittextSearch.setText(textValue)
 
         trackAdapter = TrackAdapter {
-            if (clickDebounce()) {
-                viewModel.saveTrackToHistory(it)
-                openPlayer(it)
-            }
+            onTrackClickDebounce(it)
         }
         binding.rvTracks.adapter = trackAdapter
 
         trackHistoryAdapter = TrackAdapter {
-            if (clickDebounce()) {
-                openPlayer(it)
-            }
+            openPlayer(it)
         }
         binding.history.rvHistoryTracks.adapter = trackHistoryAdapter
 
@@ -154,6 +153,11 @@ class SearchFragment : Fragment() {
         super.onDestroyView()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateHistory()
+    }
+
     private fun openPlayer(track: Track) {
         val action = SearchFragmentDirections.actionSearchFragmentToPlayerActivity(track)
         this.findNavController().navigate(action)
@@ -183,7 +187,7 @@ class SearchFragment : Fragment() {
                 textValue = s.toString()
                 binding.buttonClear.isVisible = textValue.isNotBlank()
                 controlForHistoryVisibility()
-                if (binding.edittextSearch.hasFocus() && textValue.isNotBlank()) searchDebounce()
+                if (binding.edittextSearch.hasFocus() && textValue.isNotBlank()) onSearchDebounce()
             },
             beforeTextChanged = { _, _, count, after ->
                 isBackspaceClicked = after < count
@@ -220,20 +224,6 @@ class SearchFragment : Fragment() {
                 binding.edittextSearch.text.isEmpty()
             ) show() else gone()
         }
-    }
-
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, DEBOUNCE_DELAY)
-        }
-        return current
-    }
-
-    private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, DEBOUNCE_DELAY)
     }
 
     private companion object {
