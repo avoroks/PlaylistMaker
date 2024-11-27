@@ -21,4 +21,6 @@
     <color name="cursor_color_for_search_activity_edittext">#3772E7</color>
 
     <color name="bottom_nav_view_border_day_color">#E6E8EB</color>
+
+    <color name="active_favorite_icon_color">#F56B6C</color>
 </resources>

@@ -121,7 +121,7 @@
     <ImageButton
         android:id="@+id/addToFav"
         style="@style/playerButton"
-        android:src="?attr/addToFavoriteIcon"
+        android:src="@drawable/ic_add_to_favorite"
         app:layout_constraintBottom_toTopOf="@id/horizontal_middle_guideline"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintStart_toEndOf="@+id/playButton" />

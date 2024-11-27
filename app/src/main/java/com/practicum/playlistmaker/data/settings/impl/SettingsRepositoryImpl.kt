@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.data.settings.impl
 
 import android.content.SharedPreferences
-import com.practicum.playlistmaker.data.settings.db.ApplicationTheme
+import com.practicum.playlistmaker.data.settings.sharedPrefs.ApplicationTheme
 import com.practicum.playlistmaker.domain.settings.repository.SettingsRepository
 
 class SettingsRepositoryImpl(private val sharedPrefs: SharedPreferences) : SettingsRepository {

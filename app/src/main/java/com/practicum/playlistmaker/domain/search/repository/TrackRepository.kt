@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface TrackRepository {
     fun searchTracks(expression: String): Flow<Resource<List<Track>>>
     fun saveTrackToHistory(track: Track)
-    fun getHistory(): List<Track>
+    fun getHistory(): Flow<List<Track>>
     fun clearHistory()
 }

@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.data.search.impl
 
-import com.practicum.playlistmaker.data.search.db.SearchHistory
+import com.practicum.playlistmaker.data.media.db.AppDatabase
+import com.practicum.playlistmaker.data.search.sharedPrefs.SearchHistory
 import com.practicum.playlistmaker.data.search.dto.TrackDto
 import com.practicum.playlistmaker.data.search.dto.TracksRequest
 import com.practicum.playlistmaker.data.search.dto.TracksResponse
@@ -8,13 +9,13 @@ import com.practicum.playlistmaker.data.search.network.NetworkClient
 import com.practicum.playlistmaker.domain.search.Resource
 import com.practicum.playlistmaker.domain.search.repository.TrackRepository
 import com.practicum.playlistmaker.domain.search.model.Track
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.lang.Exception
-import java.util.concurrent.Flow
 
 class TrackRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val searchHistory: SearchHistory
+    private val searchHistory: SearchHistory,
+    private val db: AppDatabase
 ) :
     TrackRepository {
     override fun searchTracks(expression: String) = flow {
@@ -38,9 +39,15 @@ class TrackRepositoryImpl(
                             it.previewUrl
                         )
                     }
+                    val favoriteTracks = db.trackDao().getIdTracks()
+
+                    trackList.filter { it.trackId in favoriteTracks }
+                        .forEach { it.isFavorite = true }
+
                     emit(Resource.Success(trackList))
                 }
             }
+
             else -> {
                 emit(Resource.Error("Произошла сетевая ошибка"))
             }
@@ -64,8 +71,8 @@ class TrackRepositoryImpl(
         )
     }
 
-    override fun getHistory(): List<Track> =
-        searchHistory.getHistory().map {
+    override fun getHistory(): Flow<List<Track>> = flow {
+        val tracks = searchHistory.getHistory().map {
             Track(
                 it.trackName,
                 it.artistName,
@@ -79,6 +86,14 @@ class TrackRepositoryImpl(
                 it.previewUrl
             )
         }.toList()
+
+        val favoriteTracks = db.trackDao().getIdTracks()
+
+        tracks.filter { it.trackId in favoriteTracks }
+            .forEach { it.isFavorite = true }
+
+        emit(tracks)
+    }
 
     override fun clearHistory() {
         searchHistory.clearHistory()

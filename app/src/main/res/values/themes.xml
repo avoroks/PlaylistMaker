@@ -18,7 +18,6 @@
     <attr name="actionButtonTextColor" format="color" />
 
     <attr name="addIcon" format="reference" />
-    <attr name="addToFavoriteIcon" format="reference" />
 
     <attr name="playerIconColor" format="color" />
     <attr name="bottomNavViewBorderColor" format="color" />
@@ -45,7 +44,6 @@
         <item name="actionButtonTextColor">@color/white</item>
 
         <item name="addIcon">@drawable/ic_add_light_mode</item>
-        <item name="addToFavoriteIcon">@drawable/ic_add_to_favorite_light_mode</item>
 
         <item name="playerIconColor">@color/main_dark_color</item>
 

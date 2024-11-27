@@ -1,13 +1,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        style="@style/imageViewForError"
-        android:src="?attr/nothingFoundImage" />
+    <include
+        android:id="@+id/empty_favorite_list"
+        layout="@layout/empty_favorite_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
-    <TextView
-        style="@style/textViewForTitle"
-        android:text="@string/empty_favorite_tracks" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_tracks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top_for_recyclerview"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/track_item" />
 </LinearLayout>

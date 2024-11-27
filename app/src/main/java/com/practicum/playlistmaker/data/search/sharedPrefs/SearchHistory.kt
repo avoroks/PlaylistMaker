@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.data.search.db
+package com.practicum.playlistmaker.data.search.sharedPrefs
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
