@@ -57,7 +57,7 @@
     <dimen name="bottom_nav_view_border_size">0.5dp</dimen>
 
 
-    <dimen name="vertical_guideline_for_content_for_create_playlist_fragment">17dp</dimen>
+    <dimen name="vertical_guideline_for_content_for_create_playlist_fragment">16dp</dimen>
     <dimen name="vertical_guideline_for_image_for_create_playlist_fragment">24dp</dimen>
 
     <dimen name="margin_top_for_horizontal_first_start_guideline_for_create_playlist_fragment">
@@ -71,7 +71,7 @@
     <dimen name="margin_bottom_for_horizontal_end_guideline_for_create_playlist_fragment">32dp
     </dimen>
 
-    <dimen name="margin_top_for_material_toolbar_for_create_playlist_fragment">10dp</dimen>
+    <dimen name="margin_top_for_material_toolbar_for_create_playlist_fragment">14dp</dimen>
     <dimen name="margin_bottom_for_material_toolbar_for_create_playlist_fragment">42dp</dimen>
 
     <dimen name="zero">0dp</dimen>

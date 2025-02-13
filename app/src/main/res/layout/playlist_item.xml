@@ -19,7 +19,7 @@
             android:id="@+id/playlistPoster"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_for_image_playlist_item"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:src="@drawable/track_placeholder" />
     </androidx.cardview.widget.CardView>
 

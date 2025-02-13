@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly
@@ -44,6 +45,12 @@ class CreatePlaylistFragment : Fragment() {
                 fileName = getFileNameFromUri(requireContext(), it)
             } ?: run { Log.d("PhotoPicker", "No media selected") }
         }
+
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            processBackPressed()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,23 +106,29 @@ class CreatePlaylistFragment : Fragment() {
         }
 
         binding.backFromCreatePlaylist.setOnClickListener {
-            if (!fileName.isNullOrEmpty() || !binding.name.text.isNullOrEmpty() || !binding.description.text.isNullOrEmpty()) {
-                val dialog = MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.complete_playlist_creation))
-                    .setMessage(getString(R.string.all_unsafe_data_will_lost))
-                    .setNegativeButton(getString(R.string.cancel), null)
-                    .setPositiveButton(getString(R.string.complete)) { _, _ -> findNavController().popBackStack() }
-                    .show()
+            processBackPressed()
+        }
 
-                listOf(
-                    dialog.getButton(BUTTON_POSITIVE),
-                    dialog.getButton(BUTTON_NEGATIVE)
-                ).forEach {
-                    it?.setTextColor(requireContext().getColor(R.color.main_light_color))
-                }
-            } else {
-                findNavController().popBackStack()
+        requireActivity().onBackPressedDispatcher.addCallback(requireActivity(), callback)
+    }
+
+    private fun processBackPressed() {
+        if (!fileName.isNullOrEmpty() || !binding.name.text.isNullOrEmpty() || !binding.description.text.isNullOrEmpty()) {
+            val dialog = MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.complete_playlist_creation))
+                .setMessage(getString(R.string.all_unsafe_data_will_lost))
+                .setNegativeButton(getString(R.string.cancel), null)
+                .setPositiveButton(getString(R.string.complete)) { _, _ -> findNavController().popBackStack() }
+                .show()
+
+            listOf(
+                dialog.getButton(BUTTON_POSITIVE),
+                dialog.getButton(BUTTON_NEGATIVE)
+            ).forEach {
+                it?.setTextColor(requireContext().getColor(R.color.main_light_color))
             }
+        } else {
+            findNavController().popBackStack()
         }
     }
 
