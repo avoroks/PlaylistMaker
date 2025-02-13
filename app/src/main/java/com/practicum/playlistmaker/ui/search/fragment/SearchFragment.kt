@@ -56,7 +56,11 @@ class SearchFragment : Fragment() {
             openPlayer(it)
         }
 
-        onSearchDebounce = debounceWithoutParamsInAction(DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) {
+        onSearchDebounce = debounceWithoutParamsInAction(
+            DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) {
             val text = binding.edittextSearch.text.toString()
             if (text.isNotEmpty()) viewModel.findTracks(text)
         }
@@ -159,7 +163,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun openPlayer(track: Track) {
-        val action = SearchFragmentDirections.actionSearchFragmentToPlayerActivity(track)
+        val action = SearchFragmentDirections.actionSearchFragmentToPlayerFragment(track)
         this.findNavController().navigate(action)
     }
 

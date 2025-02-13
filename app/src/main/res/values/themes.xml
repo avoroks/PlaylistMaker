@@ -22,6 +22,12 @@
     <attr name="playerIconColor" format="color" />
     <attr name="bottomNavViewBorderColor" format="color" />
 
+    <attr name="playlistInfoColor" format="color" />
+    <attr name="playlistCoverColor" format="color" />
+    <attr name="playlistInputBorderColor" format="color" />
+    <attr name="bottomSheetColor" format="color" />
+    <attr name="bottomsheetRectangleColor" format="color" />
+
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="mainActivityColor">@color/main_light_color</item>
         <item name="mainActivityHeaderColor">@color/white</item>
@@ -48,5 +54,11 @@
         <item name="playerIconColor">@color/main_dark_color</item>
 
         <item name="bottomNavViewBorderColor">@color/bottom_nav_view_border_day_color</item>
+
+        <item name="playlistInfoColor">@color/main_dark_color</item>
+        <item name="playlistCoverColor">@color/white</item>
+        <item name="playlistInputBorderColor">@color/input_border_day_color</item>
+        <item name="bottomSheetColor">@color/white</item>
+        <item name="bottomsheetRectangleColor">@color/bottomsheet_rectangle_day_color</item>
     </style>
 </resources>

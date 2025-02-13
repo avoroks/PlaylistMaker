@@ -1,4 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="mainActivityColor">@color/main_dark_color</item>
         <item name="mainActivityHeaderColor">@color/white</item>
@@ -25,5 +26,11 @@
         <item name="playerIconColor">@color/white</item>
 
         <item name="bottomNavViewBorderColor">@color/white</item>
+
+        <item name="playlistInfoColor">@color/white</item>
+        <item name="playlistCoverColor">@color/main_dark_color</item>
+        <item name="playlistInputBorderColor">@color/white</item>
+        <item name="bottomSheetColor">@color/main_dark_color</item>
+        <item name="bottomsheetRectangleColor">@color/white</item>
     </style>
 </resources>

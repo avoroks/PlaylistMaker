@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.ui.media
+package com.practicum.playlistmaker.ui.media.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,10 +22,6 @@ class FavoriteFragment : Fragment() {
     private val viewModel by viewModel<FavoriteViewModel>()
 
     private lateinit var trackAdapter: TrackAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,7 +68,7 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun openPlayer(track: Track) {
-        val action = MediaFragmentDirections.actionMediaFragmentToPlayerActivity(track)
+        val action = MediaFragmentDirections.actionMediaFragmentToPlayerFragment(track)
         this.findNavController().navigate(action)
     }
 

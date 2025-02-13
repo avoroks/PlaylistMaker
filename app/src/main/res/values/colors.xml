@@ -23,4 +23,7 @@
     <color name="bottom_nav_view_border_day_color">#E6E8EB</color>
 
     <color name="active_favorite_icon_color">#F56B6C</color>
+
+    <color name="input_border_day_color">#AEAFB4</color>
+    <color name="bottomsheet_rectangle_day_color">#E6E8EB</color>
 </resources>

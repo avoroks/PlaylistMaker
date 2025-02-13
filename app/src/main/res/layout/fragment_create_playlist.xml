@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/otherActivityColor">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_guideline_for_content"
+        style="@style/verticalGuideline"
+        app:layout_constraintGuide_begin="@dimen/vertical_guideline_for_content_for_create_playlist_fragment" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_guideline_for_content"
+        style="@style/verticalGuideline"
+        app:layout_constraintGuide_end="@dimen/vertical_guideline_for_content_for_create_playlist_fragment" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_guideline_for_image"
+        style="@style/verticalGuideline"
+        app:layout_constraintGuide_begin="@dimen/vertical_guideline_for_image_for_create_playlist_fragment" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_guideline_for_image"
+        style="@style/verticalGuideline"
+        app:layout_constraintGuide_end="@dimen/vertical_guideline_for_image_for_create_playlist_fragment" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_first_start_guideline"
+        style="@style/horizontalGuideline"
+        app:layout_constraintGuide_begin="@dimen/margin_top_for_horizontal_first_start_guideline_for_create_playlist_fragment" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_second_start_guideline"
+        style="@style/horizontalGuideline"
+        app:layout_constraintGuide_end="@dimen/margin_bottom_for_horizontal_second_start_guideline_for_create_playlist_fragment" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_middle_guideline"
+        style="@style/horizontalGuideline"
+        app:layout_constraintGuide_end="@dimen/margin_bottom_for_horizontal_middle_guideline_for_create_playlist_fragment" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_end_guideline"
+        style="@style/horizontalGuideline"
+        app:layout_constraintGuide_end="@dimen/margin_bottom_for_horizontal_end_guideline_for_create_playlist_fragment" />
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/back_from_create_playlist"
+        style="@style/materialToolbar"
+        android:layout_marginTop="@dimen/margin_top_for_material_toolbar_for_create_playlist_fragment"
+        android:layout_marginBottom="@dimen/margin_bottom_for_material_toolbar_for_create_playlist_fragment"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_first_start_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/new_playlist" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="@dimen/zero"
+        android:layout_height="@dimen/zero"
+        app:cardBackgroundColor="?attr/playlistCoverColor"
+        app:cardCornerRadius="@dimen/card_corner_radius_for_create_playlist_fragment"
+        app:cardElevation="@dimen/zero"
+
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_second_start_guideline"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline_for_image"
+        app:layout_constraintStart_toStartOf="@+id/left_guideline_for_image"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_first_start_guideline">
+
+        <ImageView
+            android:id="@+id/pickerImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/add_playlist"
+            android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutForName"
+        style="@style/textInputLayout"
+        android:layout_marginTop="@dimen/margin_top_for_name_input_for_create_playlist_fragment"
+        android:hint="@string/hint_for_playlist_name_field"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline_for_content"
+        app:layout_constraintStart_toStartOf="@+id/left_guideline_for_content"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_second_start_guideline">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name"
+            style="@style/textInputEditText" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutForDescription"
+        style="@style/textInputLayout"
+        android:layout_marginTop="@dimen/margin_top_for_description_input_for_create_playlist_fragment"
+        android:hint="@string/hint_for_playlist_description_field"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline_for_content"
+        app:layout_constraintStart_toStartOf="@+id/left_guideline_for_content"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutForName">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/description"
+            style="@style/textInputEditText" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/createPlaylist"
+        android:layout_width="@dimen/zero"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@string/create"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/button_create_playlist_style"
+        app:cornerRadius="@dimen/card_corner_radius_for_create_playlist_fragment"
+        app:layout_constraintBottom_toBottomOf="@+id/horizontal_end_guideline"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline_for_content"
+        app:layout_constraintStart_toStartOf="@+id/left_guideline_for_content" />
+</androidx.constraintlayout.widget.ConstraintLayout>

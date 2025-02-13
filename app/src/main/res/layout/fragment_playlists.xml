@@ -8,13 +8,18 @@
         style="@style/actionButton"
         android:text="@string/new_playlist" />
 
-    <ImageView
-        style="@style/imageViewForError"
-        android:layout_marginTop="@dimen/margin_top_for_empty_playlist_image"
-        android:src="?attr/nothingFoundImage" />
+    <include
+        android:id="@+id/empty_playlists"
+        layout="@layout/empty_playlists"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
-    <TextView
-        style="@style/textViewForTitle"
-        android:gravity="center_horizontal"
-        android:text="@string/empty_playlists" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="8dp"
+        android:paddingBottom="60dp" />
+
 </LinearLayout>

@@ -6,6 +6,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityRootBinding
+import com.practicum.playlistmaker.utils.gone
+import com.practicum.playlistmaker.utils.show
 
 class RootActivity : AppCompatActivity() {
 
@@ -22,5 +24,17 @@ class RootActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                in listOf(R.id.createPlaylistFragment, R.id.playerFragment) -> {
+                    binding.bottomNavigationView.gone()
+                }
+
+                else -> {
+                    binding.bottomNavigationView.show()
+                }
+            }
+        }
     }
 }

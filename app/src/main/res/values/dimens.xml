@@ -55,4 +55,45 @@
     <dimen name="margin_top_for_empty_playlist_image">46dp</dimen>
     <dimen name="text_size_for_tablayout">14sp</dimen>
     <dimen name="bottom_nav_view_border_size">0.5dp</dimen>
+
+
+    <dimen name="vertical_guideline_for_content_for_create_playlist_fragment">17dp</dimen>
+    <dimen name="vertical_guideline_for_image_for_create_playlist_fragment">24dp</dimen>
+
+    <dimen name="margin_top_for_horizontal_first_start_guideline_for_create_playlist_fragment">
+        82dp
+    </dimen>
+    <dimen name="margin_bottom_for_horizontal_second_start_guideline_for_create_playlist_fragment">
+        406dp
+    </dimen>
+    <dimen name="margin_bottom_for_horizontal_middle_guideline_for_create_playlist_fragment">246dp
+    </dimen>
+    <dimen name="margin_bottom_for_horizontal_end_guideline_for_create_playlist_fragment">32dp
+    </dimen>
+
+    <dimen name="margin_top_for_material_toolbar_for_create_playlist_fragment">10dp</dimen>
+    <dimen name="margin_bottom_for_material_toolbar_for_create_playlist_fragment">42dp</dimen>
+
+    <dimen name="zero">0dp</dimen>
+
+    <dimen name="card_corner_radius_for_create_playlist_fragment">8dp</dimen>
+    <dimen name="margin_top_for_name_input_for_create_playlist_fragment">32dp</dimen>
+    <dimen name="margin_top_for_description_input_for_create_playlist_fragment">16dp</dimen>
+
+    <dimen name="margin_horizontal_for_playlist_item">8dp</dimen>
+    <dimen name="margin_top_for_playlist_item">16dp</dimen>
+    <dimen name="height_for_image_playlist_item">140dp</dimen>
+    <dimen name="text_size_for_playlist_item">12sp</dimen>
+
+    <dimen name="margin_top_for_playlist_title">4dp</dimen>
+
+    <dimen name="card_view_size_for_playlist_item_in_bottomsheet">45dp</dimen>
+    <dimen name="margin_vertical_for_card_view_playlist_item_in_bottomsheet">8dp</dimen>
+    <dimen name="margin_start_for_card_view_playlist_item_in_bottomsheet">13dp</dimen>
+    <dimen name="margin_end_for_card_view_playlist_item_in_bottomsheet">8dp</dimen>
+    <dimen name="behavior_peekHeight_for_bottomsheet">505dp</dimen>
+    <dimen name="margin_top_for_bottomsheet_rectangle">8dp</dimen>
+    <dimen name="margin_top_for_bottomsheet_title">30dp</dimen>
+    <dimen name="text_size_for_bottomsheet_title">19sp</dimen>
+    <dimen name="margin_top_for_new_playlist_button_on_bottomsheet">28dp</dimen>
 </resources>

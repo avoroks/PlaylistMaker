@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.data.media.impl
 
 import com.practicum.playlistmaker.data.media.db.AppDatabase
-import com.practicum.playlistmaker.data.media.db.TrackEntity
+import com.practicum.playlistmaker.data.media.db.FavoriteTrackEntity
 import com.practicum.playlistmaker.domain.media.repository.FavoriteTracksRepository
 import com.practicum.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.flow.Flow
@@ -9,18 +9,23 @@ import kotlinx.coroutines.flow.flow
 
 class FavoriteTracksRepositoryImpl(private val db: AppDatabase) : FavoriteTracksRepository {
     override suspend fun addTrackToFavorite(track: Track) =
-        db.trackDao().insertTrack(track.mapToTrackEntity())
+        db.favoriteTrackDao().insertTrack(track.mapToTrackEntity())
 
     override suspend fun removeTrackFromFavorite(track: Track) =
-        db.trackDao().deleteTrack(track.mapToTrackEntity().id)
+        db.favoriteTrackDao().deleteTrack(track.mapToTrackEntity().id)
 
     override fun getFavoriteTracks(): Flow<List<Track>> = flow {
-        val tracks = db.trackDao().getTracks().mapToTrack()
-        tracks.forEach { it.isFavorite = true }
+        val tracks = db.favoriteTrackDao().getTracks().mapToTrack()
         emit(tracks)
     }
 
-    private fun List<TrackEntity>.mapToTrack() = map {
+    override fun isTrackFavorite(track: Track): Flow<Boolean> = flow {
+        val tracks = db.favoriteTrackDao().getTracks().mapToTrack()
+        val count = tracks.count { it.trackId == track.trackId }
+        emit(count > 0)
+    }
+
+    private fun List<FavoriteTrackEntity>.mapToTrack() = map {
         Track(
             trackName = it.trackName,
             artistName = it.artistName,
@@ -31,11 +36,12 @@ class FavoriteTracksRepositoryImpl(private val db: AppDatabase) : FavoriteTracks
             releaseDate = it.releaseDate,
             primaryGenreName = it.primaryGenreName,
             country = it.country,
-            previewUrl = it.previewUrl
+            previewUrl = it.previewUrl,
+            isFavorite = true
         )
     }
 
-    private fun Track.mapToTrackEntity() = TrackEntity(
+    private fun Track.mapToTrackEntity() = FavoriteTrackEntity(
         id = this.trackId,
         trackName = this.trackName,
         artistName = this.artistName,

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/otherActivityColor"
     android:orientation="vertical"
-    tools:context="com.practicum.playlistmaker.ui.media.MediaFragment">
+    tools:context="com.practicum.playlistmaker.ui.media.fragment.MediaFragment">
 
     <TextView
         android:id="@+id/back_from_media"

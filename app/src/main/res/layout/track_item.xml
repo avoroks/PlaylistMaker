@@ -20,20 +20,12 @@
 
         <TextView
             android:id="@+id/track_name"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/margin_top_for_track_name_textview"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:fontFamily="@font/ys_display_regular"
-            android:singleLine="true"
-            android:textColor="?attr/listElementsTextColor"
-            android:textSize="@dimen/text_size"
+            style="@style/textViewForTitleInList"
             tools:text="Track Name" />
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/zero"
             android:layout_weight="1"
             android:orientation="horizontal"
             android:paddingTop="@dimen/padding_top_for_track_additional_info">
