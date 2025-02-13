@@ -10,6 +10,6 @@ interface TracksInteractor {
     ): Flow<Pair<List<Track>?, String?>>
 
     fun saveTrackToHistory(track: Track)
-    fun getTrackHistory(): List<Track>
+    fun getTrackHistory(): Flow<List<Track>>
     fun clearTrackHistory()
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.domain.media.use_case.FavoriteTracksInteractor
 import com.practicum.playlistmaker.domain.player.use_case.MediaPlayerInteractor
 import com.practicum.playlistmaker.domain.search.model.Track
 import com.practicum.playlistmaker.ui.player.state.PlayerState
@@ -12,12 +13,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(
-    track: Track,
-    private val playerInteractor: MediaPlayerInteractor
+    val track: Track,
+    private val playerInteractor: MediaPlayerInteractor,
+    private val favoriteTracksInteractor: FavoriteTracksInteractor
 ) : ViewModel() {
 
     private val playerState = MutableLiveData<PlayerState>()
     fun getPlayerState(): LiveData<PlayerState> = playerState
+
+    private val isTrackAddedToFavoriteState = MutableLiveData<Boolean>()
+    fun getIsTrackAddedToFavoriteState(): LiveData<Boolean> = isTrackAddedToFavoriteState
 
     private var timerJob: Job? = null
 
@@ -31,6 +36,7 @@ class PlayerViewModel(
             }
         )
         playerState.value = PlayerState.Prepared
+        isTrackAddedToFavoriteState.value = track.isFavorite
     }
 
     fun playBackControl() {
@@ -54,6 +60,15 @@ class PlayerViewModel(
     fun stopPlayer() {
         playerInteractor.releaseResources()
         timerJob?.cancel()
+    }
+
+    fun onFavoriteClicked() {
+        viewModelScope.launch {
+            if (track.isFavorite) favoriteTracksInteractor.removeTrackFromFavorite(track)
+            else favoriteTracksInteractor.addTrackToFavorite(track)
+        }
+        track.isFavorite = !track.isFavorite
+        isTrackAddedToFavoriteState.value = track.isFavorite
     }
 
     private fun createUpdateTrackTimeTask() {

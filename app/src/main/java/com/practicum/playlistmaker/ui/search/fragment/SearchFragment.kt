@@ -153,6 +153,11 @@ class SearchFragment : Fragment() {
         super.onDestroyView()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateHistory()
+    }
+
     private fun openPlayer(track: Track) {
         val action = SearchFragmentDirections.actionSearchFragmentToPlayerActivity(track)
         this.findNavController().navigate(action)
