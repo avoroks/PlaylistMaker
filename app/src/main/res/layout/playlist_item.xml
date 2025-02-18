@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/margin_horizontal_for_playlist_item"
+    android:layout_marginTop="@dimen/margin_top_for_playlist_item"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="?attr/playlistCoverColor"
+        app:cardCornerRadius="@dimen/card_corner_radius_for_create_playlist_fragment"
+        app:cardElevation="@dimen/zero">
+
+        <ImageView
+            android:id="@+id/playlistPoster"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_for_image_playlist_item"
+            android:scaleType="centerCrop"
+            android:src="@drawable/track_placeholder" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/playlistTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top_for_playlist_title"
+        android:ellipsize="end"
+        android:fontFamily="@font/ys_display_regular"
+        android:maxLines="2"
+        android:textColor="?attr/playlistInfoColor"
+        android:textSize="@dimen/text_size_for_playlist_item"
+        tools:text="Title" />
+
+    <TextView
+        android:id="@+id/trackCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:textColor="?attr/playlistInfoColor"
+        android:textSize="@dimen/text_size_for_playlist_item"
+        android:textStyle="normal"
+        tools:text="-" />
+</LinearLayout>
+

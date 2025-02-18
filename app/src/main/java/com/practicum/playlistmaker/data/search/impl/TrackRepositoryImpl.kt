@@ -36,13 +36,14 @@ class TrackRepositoryImpl(
                             it.releaseDate,
                             it.primaryGenreName,
                             it.country,
-                            it.previewUrl
+                            it.previewUrl,
+                            false
                         )
                     }
-                    val favoriteTracks = db.trackDao().getIdTracks()
+                    val favoriteTracks = db.favoriteTrackDao().getIdTracks()
 
                     trackList.filter { it.trackId in favoriteTracks }
-                        .forEach { it.isFavorite = true }
+                        .map { it.copy(isFavorite = true) }
 
                     emit(Resource.Success(trackList))
                 }
@@ -83,14 +84,15 @@ class TrackRepositoryImpl(
                 it.releaseDate,
                 it.primaryGenreName,
                 it.country,
-                it.previewUrl
+                it.previewUrl,
+                false
             )
         }.toList()
 
-        val favoriteTracks = db.trackDao().getIdTracks()
+        val favoriteTracks = db.favoriteTrackDao().getIdTracks()
 
         tracks.filter { it.trackId in favoriteTracks }
-            .forEach { it.isFavorite = true }
+            .map { it.copy(isFavorite = true) }
 
         emit(tracks)
     }

@@ -3,8 +3,8 @@ package com.practicum.playlistmaker.data.media.db
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "tracks")
-data class TrackEntity(
+@Entity(tableName = "favorite_tracks")
+data class FavoriteTrackEntity(
     @PrimaryKey
     val id: Int,
     val imageUrl: String,

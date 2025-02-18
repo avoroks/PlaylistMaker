@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="@dimen/card_view_size_for_playlist_item_in_bottomsheet"
+        android:layout_height="@dimen/card_view_size_for_playlist_item_in_bottomsheet"
+        android:layout_marginVertical="@dimen/margin_vertical_for_card_view_playlist_item_in_bottomsheet"
+        android:layout_marginStart="@dimen/margin_start_for_card_view_playlist_item_in_bottomsheet"
+        android:layout_marginEnd="@dimen/margin_end_for_card_view_playlist_item_in_bottomsheet"
+        app:cardBackgroundColor="?attr/playlistCoverColor"
+        app:cardCornerRadius="@dimen/card_corner_radius_for_create_playlist_fragment"
+        app:cardElevation="@dimen/zero">
+
+        <ImageView
+            android:id="@+id/playlistPoster"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/track_placeholder" />
+
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="7"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/playlistTitle"
+            style="@style/textViewForTitleInList"
+            tools:text="Playlist Name" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/zero"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/padding_top_for_track_additional_info">
+
+            <TextView
+                android:id="@+id/trackCount"
+                style="@style/textViewForTrackAdditionalInfo"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Track count" />
+
+            <TextView
+                android:id="@+id/track_count_description"
+                style="@style/textViewForTrackAdditionalInfo"
+                tools:text="-" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

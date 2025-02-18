@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.ui.media
+package com.practicum.playlistmaker.ui.media.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
