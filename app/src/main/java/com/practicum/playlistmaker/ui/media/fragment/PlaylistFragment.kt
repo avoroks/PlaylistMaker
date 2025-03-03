@@ -55,11 +55,11 @@ class PlaylistFragment : Fragment() {
             clickListener = { openPlayer(it) },
             longClickListener = {
                 val dialog = MaterialAlertDialogBuilder(requireContext())
-                    .setMessage("Хотите удалить трек?")
-                    .setPositiveButton("Да") { _, _ ->
+                    .setMessage("Вы уверены, что хотите удалить трек из плейлиста?")
+                    .setPositiveButton("Удалить") { _, _ ->
                         viewModel.deleteTrackFromPlaylist(it.trackId)
                     }
-                    .setNegativeButton("Нет", null)
+                    .setNegativeButton("Отмена", null)
                     .show()
 
                 listOf(
@@ -116,12 +116,12 @@ class PlaylistFragment : Fragment() {
 
         binding.deletePlaylistInAdditionalInfo.setOnClickListener {
             val dialog = MaterialAlertDialogBuilder(requireContext())
-                .setMessage("Хотите удалить плейлист ${binding.playlistItem.playlistTitle.text}?")
-                .setPositiveButton("Да") { _, _ ->
+                .setMessage("Вы уверены, что хотите удалить плейлист ${binding.playlistItem.playlistTitle.text}?")
+                .setPositiveButton("Удалить") { _, _ ->
                     viewModel.removePlaylist()
                     delayAction { findNavController().popBackStack() }
                 }
-                .setNegativeButton("Нет", null)
+                .setNegativeButton("Отмена", null)
                 .show()
 
             listOf(
