@@ -43,4 +43,9 @@
     <string name="complete">Завершить</string>
     <string name="cancel">Отмена</string>
     <string name="add_to_playlist">Добавить в плейлист</string>
+    <string name="share">Поделиться</string>
+    <string name="editInfo">Редактировать информацию</string>
+    <string name="deletePlaylist">Удалить плейлист</string>
+    <string name="defaultDuration">0 минут</string>
+    <string name="save">Сохранить</string>
 </resources>

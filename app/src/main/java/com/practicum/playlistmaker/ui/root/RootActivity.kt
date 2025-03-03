@@ -27,7 +27,7 @@ class RootActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                in listOf(R.id.createPlaylistFragment, R.id.playerFragment) -> {
+                in listOf(R.id.createPlaylistFragment, R.id.playerFragment, R.id.playlistFragment, R.id.editPlaylistFragment) -> {
                     binding.bottomNavigationView.gone()
                 }
 

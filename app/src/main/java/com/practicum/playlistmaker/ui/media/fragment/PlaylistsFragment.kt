@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.practicum.playlistmaker.domain.media.model.Playlist
 import com.practicum.playlistmaker.ui.media.fragment.rv_playlists.PlaylistsAdapter
 import com.practicum.playlistmaker.ui.media.state.PlaylistsState
 import com.practicum.playlistmaker.ui.media.view_model.PlaylistsViewModel
@@ -37,13 +38,16 @@ class PlaylistsFragment : Fragment() {
             openCreatePlaylist()
         }
 
-        playlistAdapter = PlaylistsAdapter() {}
+        playlistAdapter = PlaylistsAdapter() {
+            openPlaylist(it)
+        }
 
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
         binding.recyclerView.adapter = playlistAdapter
 
         viewModel.getPlaylistsState().observe(viewLifecycleOwner) { state ->
+            playlistAdapter.submitList(null)
             when (state) {
                 is PlaylistsState.EmptyState -> {
                     binding.emptyPlaylists.root.show()
@@ -68,6 +72,11 @@ class PlaylistsFragment : Fragment() {
 
     private fun openCreatePlaylist() {
         val action = MediaFragmentDirections.actionMediaFragmentToCreatePlaylistFragment()
+        this.findNavController().navigate(action)
+    }
+
+    private fun openPlaylist(playlist: Playlist) {
+        val action = MediaFragmentDirections.actionMediaFragmentToPlaylistFragment(playlist.id)
         this.findNavController().navigate(action)
     }
 
