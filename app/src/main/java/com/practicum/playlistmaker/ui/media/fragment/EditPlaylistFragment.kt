@@ -18,12 +18,11 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
         parametersOf(playlistId)
     }
     private val args: EditPlaylistFragmentArgs by navArgs()
-    private var playlistId: Int = 0
+    private val playlistId by lazy { args.playlistId }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        playlistId = args.playlistId
 
         viewModel.getPlaylistState().observe(viewLifecycleOwner) { data ->
             with(binding) {
@@ -51,6 +50,10 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
             )
 
             delayAction { findNavController().popBackStack() }
+        }
+
+        binding.backFromCreatePlaylist.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 }

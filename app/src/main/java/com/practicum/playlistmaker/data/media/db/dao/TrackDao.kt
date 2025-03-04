@@ -11,7 +11,7 @@ interface TrackDao {
     @Insert(entity = TrackEntity::class, onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrack(track: TrackEntity)
 
-    @Query("SELECT * FROM tracks")
+    @Query("SELECT * FROM tracks ORDER BY createdAt DESC")
     suspend fun getTracks(): List<TrackEntity>
 
     @Query("DELETE FROM tracks WHERE id = :id")

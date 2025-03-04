@@ -37,7 +37,8 @@ class PlaylistFragment : Fragment() {
     private lateinit var trackAdapter: TrackAdapter
 
     private val args: PlaylistFragmentArgs by navArgs()
-    private var playlistId: Int = 0
+
+    private val playlistId by lazy { args.playlistId }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,17 +50,16 @@ class PlaylistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        playlistId = args.playlistId
 
         trackAdapter = TrackAdapter(
             clickListener = { openPlayer(it) },
             longClickListener = {
                 val dialog = MaterialAlertDialogBuilder(requireContext())
-                    .setMessage("Вы уверены, что хотите удалить трек из плейлиста?")
-                    .setPositiveButton("Удалить") { _, _ ->
+                    .setMessage("Хотите удалить трек?")
+                    .setPositiveButton("Да") { _, _ ->
                         viewModel.deleteTrackFromPlaylist(it.trackId)
                     }
-                    .setNegativeButton("Отмена", null)
+                    .setNegativeButton("Нет", null)
                     .show()
 
                 listOf(
@@ -116,12 +116,12 @@ class PlaylistFragment : Fragment() {
 
         binding.deletePlaylistInAdditionalInfo.setOnClickListener {
             val dialog = MaterialAlertDialogBuilder(requireContext())
-                .setMessage("Вы уверены, что хотите удалить плейлист ${binding.playlistItem.playlistTitle.text}?")
-                .setPositiveButton("Удалить") { _, _ ->
+                .setMessage("Хотите удалить плейлист ${binding.playlistItem.playlistTitle.text}?")
+                .setPositiveButton("Да") { _, _ ->
                     viewModel.removePlaylist()
                     delayAction { findNavController().popBackStack() }
                 }
-                .setNegativeButton("Отмена", null)
+                .setNegativeButton("Нет", null)
                 .show()
 
             listOf(
