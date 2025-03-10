@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.domain.media.use_case.PlaylistsInteractor
 import com.practicum.playlistmaker.ui.media.state.PlaylistsState
 import kotlinx.coroutines.launch
 
-class PlaylistsViewModel(private val playlistsInteractor: PlaylistsInteractor) : ViewModel() {
+open class PlaylistsViewModel(private val playlistsInteractor: PlaylistsInteractor) : ViewModel() {
     private val playlistsState = MutableLiveData<PlaylistsState>()
     fun getPlaylistsState(): LiveData<PlaylistsState> = playlistsState
 

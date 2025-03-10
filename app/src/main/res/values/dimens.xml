@@ -96,4 +96,21 @@
     <dimen name="margin_top_for_bottomsheet_title">30dp</dimen>
     <dimen name="text_size_for_bottomsheet_title">19sp</dimen>
     <dimen name="margin_top_for_new_playlist_button_on_bottomsheet">28dp</dimen>
+
+    <dimen name="left_vertical_guideline_for_content_playlist_fragment">16dp</dimen>
+    <dimen name="horizontal_start_guideline_for_playlist_fragment">360dp</dimen>
+    <dimen name="horizontal_middle_guideline_for_playlist_fragment">230dp</dimen>
+    <dimen name="text_size_for_playlist_title">24sp</dimen>
+    <dimen name="margin_top_for_playlist_title_for_playlist_fragment">24dp</dimen>
+    <dimen name="text_size_for_playlist_info">18sp</dimen>
+    <dimen name="margin_top_for_playlist_info_for_playlist_fragment">8dp</dimen>
+    <dimen name="icon_size_for_playlist_fragment">24dp</dimen>
+    <dimen name="margin_for_icons_for_playlist_fragment">16dp</dimen>
+    <dimen name="peek_height_for_bottomsheet_with_tracks_for_playlist_fragment">230dp</dimen>
+    <dimen name="peek_height_for_bottomsheet_with_additional_info_for_playlist_fragment">383dp</dimen>
+    <dimen name="padding_horizontal_for_textview_in_additional_info_for_playlist_fragment">16dp</dimen>
+    <dimen name="padding_vertical_for_textview_in_additional_info_for_playlist_fragment">21dp</dimen>
+    <dimen name="text_size_for_additional_actions_with_playlist">16sp</dimen>
+    <dimen name="margin_top_for_additional_actions_with_playlist">8dp</dimen>
+    <dimen name="margin_vertical_for_delimiter">4dp</dimen>
 </resources>

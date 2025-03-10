@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.ui.media.fragment
 
 import android.app.AlertDialog.BUTTON_NEGATIVE
 import android.app.AlertDialog.BUTTON_POSITIVE
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -17,25 +18,24 @@ import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.practicum.playlistmaker.ui.media.view_model.PlaylistsViewModel
 import com.practicum.playlistmaker.utils.getFileNameFromUri
+import com.practicum.playlistmaker.utils.showSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class CreatePlaylistFragment : Fragment() {
+open class CreatePlaylistFragment : Fragment() {
     private var _binding: FragmentCreatePlaylistBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
-    private val viewModel by viewModel<PlaylistsViewModel>()
+    open val viewModel by viewModel<PlaylistsViewModel>()
 
-    private var fileName: String? = null
+    var fileName: String? = null
 
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -50,6 +50,11 @@ class CreatePlaylistFragment : Fragment() {
         override fun handleOnBackPressed() {
             processBackPressed()
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().onBackPressedDispatcher.addCallback(requireActivity(), callback)
     }
 
     override fun onCreateView(
@@ -83,24 +88,7 @@ class CreatePlaylistFragment : Fragment() {
                 url = fileUrl
             )
 
-            Snackbar.make(
-                binding.root,
-                "Плейлист ${binding.name.text.toString()} создан",
-                Snackbar.LENGTH_SHORT
-            )
-                .setBackgroundTint(
-                    MaterialColors.getColor(
-                        this.requireView(),
-                        R.attr.playlistInfoColor
-                    )
-                )
-                .setTextColor(
-                    MaterialColors.getColor(
-                        this.requireView(),
-                        R.attr.playlistCoverColor
-                    )
-                )
-                .show()
+            showSnackbar(this.requireView(), binding, "Плейлист ${binding.name.text.toString()} создан")
 
             findNavController().popBackStack()
         }
@@ -108,8 +96,11 @@ class CreatePlaylistFragment : Fragment() {
         binding.backFromCreatePlaylist.setOnClickListener {
             processBackPressed()
         }
+    }
 
-        requireActivity().onBackPressedDispatcher.addCallback(requireActivity(), callback)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        callback.remove()
     }
 
     private fun processBackPressed() {
